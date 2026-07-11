@@ -1,4 +1,3 @@
-import DashboardCards from "@/components/DashboardCards"
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom"
 
@@ -25,7 +24,6 @@ const Landing = () => {
             Dashboard
           </Button>
         </Link>
-        <DashboardCards />
       </div>
     </div>
   )

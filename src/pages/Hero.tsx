@@ -65,7 +65,7 @@ const invoices = [
 
 const Hero = () => {
   return (
-    <div className="">
+    <div className="h-screen bg-red-200 rounded-xl">
       {/* Top Section */}
       <div className="flex gap-10">
         <div className="flex-1 relative">
@@ -86,7 +86,7 @@ const Hero = () => {
 
 
       {/* Bottom Section */}
-      <div>
+      <div className="h-full">
         {/* Bottom top section */}
         <div className="flex items-center justify-between">
           <div>

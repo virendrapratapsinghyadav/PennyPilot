@@ -1,6 +1,4 @@
 import { Button } from "@/components/ui/button"
-import Login from "./Login"
-import Signup from "./Signup"
 import { Link } from "react-router-dom"
 
 
@@ -13,12 +11,17 @@ const Landing = () => {
         </div>
         <Link to={'/signup'}>
           <Button>
-            <Signup />
+            SignUp
           </Button>
         </Link>
         <Link to={'/login'}>
           <Button>
-            <Login />
+            Login
+          </Button>
+        </Link>
+        <Link to={'/dashboard'}>
+          <Button>
+            Dashboard
           </Button>
         </Link>
       </div>

@@ -1,3 +1,4 @@
+import DashboardCards from "@/components/DashboardCards"
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom"
 
@@ -5,7 +6,7 @@ import { Link } from "react-router-dom"
 const Landing = () => {
   return (
     <div>
-      <div>
+      <div className="">
         <div className='bg-[#10B981]'>
           Landing Page PennyPilot - Take control of every rupee with AI-powered financial insights.
         </div>
@@ -24,6 +25,7 @@ const Landing = () => {
             Dashboard
           </Button>
         </Link>
+        <DashboardCards />
       </div>
     </div>
   )

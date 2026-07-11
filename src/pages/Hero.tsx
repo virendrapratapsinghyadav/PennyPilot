@@ -12,6 +12,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Link } from "react-router-dom"
+import TransactionDialog from "@/components/TransactionDialog"
+import DashboardCards from "@/components/DashboardCards"
 
 
 const invoices = [
@@ -88,11 +90,13 @@ const Hero = () => {
         {/* Bottom top section */}
         <div className="flex items-center justify-between">
           <div>
-            <h1>Transactions</h1>
-            <p>View and manage all your income and expenses in one place</p>
+            <h1 className="text-xl font-bold">Transactions</h1>
+            <p className="text-slate-500 text-sm">
+              View and manage all your income and expenses in one place
+            </p>
           </div>
           <div>
-            <Button size={'lg'}>Add Transactions</Button>
+            <TransactionDialog/>
           </div>
         </div>
 
@@ -101,10 +105,10 @@ const Hero = () => {
           {/* Left section */}
           <div className="flex flex-col flex-1 border">
             {/* Left top section */}
-            <div className="flex justify-between">
-              <div>Total transactions Card</div>
-              <div>Incomes Card</div>
-              <div>Expenses Card</div>
+            <div className="flex gap-10 p-1">
+              <DashboardCards/>
+              <DashboardCards/>
+              <DashboardCards/>
             </div>
 
             {/* Left bottom section */}

@@ -1,3 +1,4 @@
+import ProfileUpdateDialog from "@/components/ProfileUpdateDialog"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
@@ -20,7 +21,7 @@ const Profile = () => {
           </div>
         </CardContent>
         <CardFooter>
-          <Button className='w-full'>Update</Button>
+          <ProfileUpdateDialog/>
         </CardFooter>
       </Card>
     </div>

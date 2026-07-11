@@ -26,6 +26,11 @@ const Leftpanel = () => {
             {/* Page change section */}
             <div className="mt-10 flex flex-col gap-5 border p-1">
                 <div className="border">
+                    <Link to={'/dashboard'}>
+                    <p>Dashboard</p>
+                    </Link>
+                </div>
+                <div className="border">
                     <Link to={'/dashboard/analytics'}>
                     <p>Analytic Charts</p>
                     </Link>

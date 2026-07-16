@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { signupSchema, type SignupFormData } from "@/schemas/authSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form"
+import { signupUserWithEmailAndPassword } from "@/firebase/auth"; 
 
 
 
@@ -21,9 +22,10 @@ const Signup = () => {
     }
   });
 
-  const onSubmit = (data: SignupFormData) => {
+  const onSubmit = async (data: SignupFormData) => {
     try {
-      console.log(data);
+      const newUser = await signupUserWithEmailAndPassword(data)
+      console.log(newUser);
       form.reset();
     } catch (error) {
       console.log(error);

@@ -2,15 +2,16 @@
 import { initializeApp } from "firebase/app";
 
 
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDYn5pLu7e5kWRYquHgJVkhtp-fIH8mSBw",
-  authDomain: "pennypilot-5a73c.firebaseapp.com",
-  projectId: "pennypilot-5a73c",
-  storageBucket: "pennypilot-5a73c.firebasestorage.app",
-  messagingSenderId: "728684704242",
-  appId: "1:728684704242:web:d427d103d17f7ffb7f7b6b"
+  apiKey: import.meta.env.FIREBASE_API_KEY,
+  authDomain: import.meta.env.FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.FIREBASE_APP_ID
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);

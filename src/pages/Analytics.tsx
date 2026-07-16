@@ -1,9 +1,10 @@
+import RadarCharts from "@/charts/RadarCharts"
 
 
 const Analytics = () => {
   return (
     <div>
-      Analytics
+      <RadarCharts/>
     </div>
   )
 }

@@ -14,6 +14,7 @@ import {
 import { Link } from "react-router-dom"
 import TransactionDialog from "@/components/TransactionDialog"
 import DashboardCards from "@/components/DashboardCards"
+import RadarCharts from "@/charts/RadarCharts"
 
 
 const invoices = [
@@ -117,7 +118,7 @@ const Hero = () => {
                 <TableCaption>A list of your recent invoices.</TableCaption>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-[100px]">Invoice</TableHead>
+                    <TableHead className="">Invoice</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Method</TableHead>
                     <TableHead className="text-right">Amount</TableHead>
@@ -144,15 +145,15 @@ const Hero = () => {
           </div>
 
           {/* Right Section */}
-          <div>
+          <div className="w-125">
             {/* Right top Section */}
             <div>
-              circle Chart
+              <RadarCharts/>
             </div>
 
             {/* Right bottom Section */}
             <div>
-              Anything else
+              <RadarCharts/>
             </div>
           </div>
         </div>

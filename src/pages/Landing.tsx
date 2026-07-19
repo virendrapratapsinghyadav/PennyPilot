@@ -19,7 +19,7 @@ const Landing = () => {
             Login
           </Button>
         </Link>
-        <Link to={'/dashboard'}>
+        <Link to={`/dashboard/userIdleke ao`}>
           <Button>
             Dashboard
           </Button>

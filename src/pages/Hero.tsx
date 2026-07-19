@@ -73,7 +73,7 @@ const Hero = () => {
           <Search className="absolute  left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
           <Input type="text" className="pl-8" placeholder="Search anything" />
         </div>
-        <Link to={'/dashboard/profile'}>
+        <Link to={'profile'}>
         <div className="flex items-center justify-center border px-2">
           <div className="px-1">
             <img src="/Logo.png" width={'15px'} height={'15px'} className="rounded" />

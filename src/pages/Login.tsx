@@ -5,12 +5,15 @@ import { Input } from "@/components/ui/input"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { loginSchema, type LoginFormData } from "@/schemas/authSchema"
+import { loginUserWithEmailAndPassword } from "@/firebase/auth"
+import { useNavigate } from "react-router-dom"
 
 
 
 
 
 const Login = () => {
+  const navigate = useNavigate();
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -20,9 +23,11 @@ const Login = () => {
     },
   });
 
-  const onSubmit = (data: LoginFormData) => {
+  const onSubmit = async(data: LoginFormData) => {
     try{
-      console.log(data);
+      const existingUser = await loginUserWithEmailAndPassword(data)
+      console.log(existingUser);
+      navigate(`/dashboard/users/${existingUser?.user?.uid}`);
       form.reset();
     }
     catch(error){

@@ -14,6 +14,8 @@ const Dashboard = () => {
         <Outlet />
       </main>
     </div>
+    <div>
+    </div>
     </div>
   )
 }

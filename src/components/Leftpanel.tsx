@@ -10,7 +10,7 @@ const Leftpanel = () => {
             <div className="flex flex-col border rounded-lg flex-1">
             {/* Logo & Theme section */}
             <div className="flex items-center justify-between p-1 border rounded">
-                <Link to={'/dashboard'}>
+                <Link to={'.'}>
                 <div className="flex items-center gap-1">
                     <div>
                         <img src="/Logo.png" width={'40px'} height={'20px'} className="rounded-md" />
@@ -26,22 +26,22 @@ const Leftpanel = () => {
             {/* Page change section */}
             <div className="mt-10 flex flex-col gap-5 border p-1">
                 <div className="border">
-                    <Link to={'/dashboard'}>
+                    <Link to={'.'}>
                     <p>Dashboard</p>
                     </Link>
                 </div>
                 <div className="border">
-                    <Link to={'/dashboard/analytics'}>
+                    <Link to={'analytics'}>
                     <p>Analytic Charts</p>
                     </Link>
                 </div>
                 <div className="border">
-                    <Link to={'/dashboard/aiinsights'}>
+                    <Link to={'aiinsights'}>
                     <p>AI Insights</p>
                     </Link>
                 </div>
                 <div className="border">
-                    <Link to={'/dashboard/help'}>
+                    <Link to={'help'}>
                     <p>Help</p>
                     </Link>
                 </div>
@@ -50,7 +50,7 @@ const Leftpanel = () => {
 
             {/* Logout section */}
             <div className="">
-                <Link to={'/logout'}>
+                <Link to={'logout'}>
                 <Button className={'w-full'}>Logout</Button>
                 </Link>
             </div>

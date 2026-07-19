@@ -5,12 +5,15 @@ import { Input } from "@/components/ui/input";
 import { signupSchema, type SignupFormData } from "@/schemas/authSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form"
-import { signupUserWithEmailAndPassword } from "@/firebase/auth"; 
+import { signupUserWithEmailAndPassword } from "@/firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 
 
 
 const Signup = () => {
+
+  const navigate = useNavigate();
 
   const form = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
@@ -24,8 +27,9 @@ const Signup = () => {
 
   const onSubmit = async (data: SignupFormData) => {
     try {
-      const newUser = await signupUserWithEmailAndPassword(data)
+      const newUser = await signupUserWithEmailAndPassword(data);
       console.log(newUser);
+      navigate(`/dashboard/users/${newUser?.user?.uid}`);
       form.reset();
     } catch (error) {
       console.log(error);

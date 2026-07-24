@@ -1,9 +1,17 @@
 import { Sun } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Button } from "./ui/button"
+import { logoutUser } from "@/firebase/auth"
 
 
 const Leftpanel = () => {
+
+    const navigate = useNavigate();
+    const handleLogout = async()=>{
+        await logoutUser();
+        navigate("/login");
+    };
+
     return (
         <div className="flex flex-col h-full">
             {/* Top section */}
@@ -50,9 +58,7 @@ const Leftpanel = () => {
 
             {/* Logout section */}
             <div className="">
-                <Link to={'logout'}>
-                <Button className={'w-full'}>Logout</Button>
-                </Link>
+                <Button className={'w-full'} onClick={handleLogout}>Logout</Button>
             </div>
         </div>
     )

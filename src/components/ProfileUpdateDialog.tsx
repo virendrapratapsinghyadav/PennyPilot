@@ -3,13 +3,16 @@ import { Button } from "./ui/button"
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog"
 import { Field, FieldLabel } from "./ui/field";
 import { Input } from "./ui/input";
+import { useUserStore } from "@/store/store";
 
 
 const ProfileUpdateDialog = () => {
 
+  const user = useUserStore((state)=>state.user);
+
   const form = useForm({
     defaultValues: {
-    name: "",
+    name: user?.name ||"",
     email: "",
     oldpassword: "",
     newpassword: "",
@@ -42,7 +45,7 @@ const ProfileUpdateDialog = () => {
                   <FieldLabel>Name</FieldLabel>
                   <Input
                     {...field}
-                    placeholder="previous name with data"
+                    placeholder={user?.name}
                   />
                 </Field>
               )}
@@ -56,7 +59,7 @@ const ProfileUpdateDialog = () => {
                   <Input
                     {...field}
                     disabled
-                    placeholder="previous email with data"
+                    placeholder={user?.email}
                   />
                 </Field>
               )}

@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { loginSchema, type LoginFormData } from "@/schemas/authSchema"
 import { loginUserWithEmailAndPassword } from "@/firebase/auth"
 import { useNavigate } from "react-router-dom"
+import { useUserStore } from "@/store/store"
 
 
 
@@ -14,6 +15,7 @@ import { useNavigate } from "react-router-dom"
 
 const Login = () => {
   const navigate = useNavigate();
+  const setUser = useUserStore((state)=>state.setUser);
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -23,77 +25,85 @@ const Login = () => {
     },
   });
 
-  const onSubmit = async(data: LoginFormData) => {
-    try{
-      const existingUser = await loginUserWithEmailAndPassword(data)
-      console.log(existingUser);
-      navigate(`/dashboard/users/${existingUser?.user?.uid}`);
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      const existingUser = await loginUserWithEmailAndPassword(data);
+      if (!existingUser.userData) {
+        throw new Error("User data not found");
+      }
+      setUser({
+        id: existingUser.user.uid,
+        name: existingUser.userData.name,
+        email: existingUser.userData.email,
+        profileURL: ""
+      });
+      navigate('/dashboard');
       form.reset();
     }
-    catch(error){
+    catch (error) {
       console.log(error);
     }
-    
+
   }
 
   return (
     <div className="flex justify-center items-center min-h-screen">
       <Card className="shadow-xl w-[90%] sm:w-100 md:w-112.5 lg:w-125">
-      <CardHeader className="flex flex-col items-center justify-center">
-        <CardTitle>Login</CardTitle>
-        <CardDescription>
-          Enter your email below to login
-        </CardDescription>
-      </CardHeader>
+        <CardHeader className="flex flex-col items-center justify-center">
+          <CardTitle>Login</CardTitle>
+          <CardDescription>
+            Enter your email below to login
+          </CardDescription>
+        </CardHeader>
 
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-      <CardContent>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <CardContent>
 
-          <FieldGroup>
-            <Controller
-              name="email"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Email</FieldLabel>
-                  <Input
-                    {...field}
-                    id={field.name}
-                    aria-invalid={fieldState.invalid}
-                    placeholder="John@email.com"
-                    autoComplete="off"
-                  />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                </Field>
-              )}
-            />
-             <Controller
-              name="password"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-                  <Input
-                    {...field}
-                    id={field.name}
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Enter password"
-                    autoComplete="off"
-                  />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                </Field>
-              )}
-            />
-          </FieldGroup>
-      </CardContent>
+            <FieldGroup>
+              <Controller
+                name="email"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                    <Input
+                      {...field}
+                      id={field.name}
+                      aria-invalid={fieldState.invalid}
+                      placeholder="John@email.com"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="password"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                    <Input
+                      {...field}
+                      id={field.name}
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Enter password"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+          </CardContent>
 
-      <CardFooter>
-        <Button
-        className={'w-full'} 
-        type="submit">Login</Button>
-      </CardFooter>
-      </form>
-    </Card>
+          <CardFooter>
+            <Button
+              className={'w-full'}
+              type="submit">Login</Button>
+          </CardFooter>
+        </form>
+      </Card>
     </div>
   )
 }

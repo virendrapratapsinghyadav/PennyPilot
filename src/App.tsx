@@ -9,6 +9,12 @@ import Help from './pages/Help'
 import AIInsights from './pages/AIInsights'
 import Analytics from './pages/Analytics'
 import Profile from './pages/Profile'
+import { useEffect } from 'react'
+import { onAuthStateChanged } from 'firebase/auth'
+import { firebaseAuth } from './firebase/auth'
+import { useUserStore } from './store/store'
+import { doc, getDoc } from 'firebase/firestore'
+import { db } from './firebase/config'
 
 
 const router = createBrowserRouter([
@@ -25,7 +31,7 @@ const router = createBrowserRouter([
     element: <Login />
   },
   {
-    path: '/dashboard/users/:id',
+    path: '/dashboard',
     element: <Dashboard />,
     children: [
       {
@@ -34,19 +40,19 @@ const router = createBrowserRouter([
       },
       {
         path: 'analytics',
-        element: <Analytics/>
+        element: <Analytics />
       },
       {
         path: 'aiinsights',
-        element: <AIInsights/>
+        element: <AIInsights />
       },
       {
         path: 'help',
-        element: <Help/>
+        element: <Help />
       },
       {
         path: 'profile',
-        element: <Profile/>
+        element: <Profile />
       },
     ]
   },
@@ -55,6 +61,29 @@ const router = createBrowserRouter([
 
 function App() {
 
+  const setUser = useUserStore(state => state.setUser);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(firebaseAuth, async (currentUser) => {
+      if (currentUser) {
+        const userDoc = await getDoc(
+          doc(db, "users", currentUser.uid)
+        );
+        const profile = userDoc.exists()? userDoc.data(): null;
+
+        setUser({
+          id: currentUser.uid,
+          name: profile?.name ?? "",
+          email: currentUser.email ?? "",
+          profileURL: profile?.profileURL ?? ""
+        });
+      } else {
+        console.log("ERROR: listener user not found");
+        setUser(null);
+      }
+    });
+    return unsubscribe;
+  }, []);
 
   return (
     <RouterProvider router={router}>

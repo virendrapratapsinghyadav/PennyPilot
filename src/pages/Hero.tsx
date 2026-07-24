@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Search } from "lucide-react"
 import {
@@ -15,6 +14,7 @@ import { Link } from "react-router-dom"
 import TransactionDialog from "@/components/TransactionDialog"
 import DashboardCards from "@/components/DashboardCards"
 import RadarCharts from "@/charts/RadarCharts"
+import { useUserStore } from "@/store/store";
 
 
 const invoices = [
@@ -65,6 +65,7 @@ const invoices = [
 
 
 const Hero = () => {
+  const user = useUserStore((state)=>state.user);
   return (
     <div className="h-screen bg-red-200 rounded-xl">
       {/* Top Section */}
@@ -79,7 +80,7 @@ const Hero = () => {
             <img src="/Logo.png" width={'15px'} height={'15px'} className="rounded" />
           </div>
           <div>
-            Virendra
+            {user?.name}
           </div>
         </div>
         </Link>
@@ -142,7 +143,7 @@ const Hero = () => {
                 </TableFooter>
               </Table>
             </div>
-          </div>
+          </div>B
 
           {/* Right Section */}
           <div className="w-125">

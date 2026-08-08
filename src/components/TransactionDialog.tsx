@@ -94,7 +94,6 @@ const TransactionDialog = () => {
   const types = [
     { label: "Income", value: "Income" },
     { label: "Expense", value: "Expense" },
-    { label: "Saving", value: "Saving" },
   ]
 
 

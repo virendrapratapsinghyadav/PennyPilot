@@ -6,11 +6,18 @@ import DashboardCards from "@/components/DashboardCards"
 import RadarCharts from "@/charts/RadarCharts"
 import { useUserStore } from "@/store/store";
 import DemoPage from "@/components/payments/Page"
+import { getTotalByType } from "@/utils/transaction.utils"
+import { useTransactionStore } from "@/store/transactionStore"
 
 
 
 const Hero = () => {
   const user = useUserStore((state)=>state.user);
+  const transaction = useTransactionStore((state)=>state.transactions)
+  const income = getTotalByType(transaction, "Income");
+  const expense = getTotalByType(transaction, "Expense");
+  const saving = income-expense;
+
   return (
     <div className="h-screen bg-red-200 rounded-xl">
       {/* Top Section */}
@@ -53,16 +60,31 @@ const Hero = () => {
           <div className="flex flex-col flex-1 border">
             {/* Left top section */}
             <div className="flex gap-10 p-1">
-              <DashboardCards/>
-              <DashboardCards/>
-              <DashboardCards/>
+              <DashboardCards 
+              title="Income"
+              amount={income}
+              percentage={10.5}
+              change={487}
+              />
+              <DashboardCards 
+              title="Expense"
+              amount={expense}
+              percentage={10.5}
+              change={487}
+              />
+              <DashboardCards 
+              title="Saving"
+              amount={saving}
+              percentage={10.5}
+              change={487}
+              />
             </div>
 
             {/* Left bottom section */}
             <div>
               <DemoPage/>
             </div>
-          </div>B
+          </div>
 
           {/* Right Section */}
           <div className="w-125">

@@ -10,14 +10,8 @@ import type { Payment, FirestorePayment } from "./Columns";
 
 export default function DemoPage() {
   const user = useUserStore((state) => state.user);
-
-  const transactions = useTransactionStore(
-    (state) => state.transactions
-  );
-
-  const setTransactions = useTransactionStore(
-    (state) => state.setTransactions
-  );
+  const transactions = useTransactionStore((state) => state.transactions);
+  const setTransactions = useTransactionStore((state) => state.setTransactions);
 
 
   useEffect(() => {

@@ -3,20 +3,42 @@ import { Search } from "lucide-react"
 import { Link } from "react-router-dom"
 import TransactionDialog from "@/components/TransactionDialog"
 import DashboardCards from "@/components/DashboardCards"
-import RadarCharts from "@/charts/RadarCharts"
 import { useUserStore } from "@/store/store";
 import DemoPage from "@/components/payments/Page"
-import { getTotalByType } from "@/utils/transaction.utils"
+import { getPercentage, getTotalByType, getTransactionsByMonth } from "@/utils/transaction.utils"
 import { useTransactionStore } from "@/store/transactionStore"
+import { ChartRadialStacked } from "@/charts/ChartRadialStacked"
+import { ExpenseByCategoryChart } from "@/charts/ExpenseByCategoryChart"
 
 
 
 const Hero = () => {
-  const user = useUserStore((state)=>state.user);
-  const transaction = useTransactionStore((state)=>state.transactions)
-  const income = getTotalByType(transaction, "Income");
-  const expense = getTotalByType(transaction, "Expense");
-  const saving = income-expense;
+  const user = useUserStore((state) => state.user);
+  const transaction = useTransactionStore((state) => state.transactions)
+
+  const date = new Date();
+  const currentMonth = date.getMonth() + 1;
+  const currentYear = date.getFullYear();
+
+  //Income
+  const previousIncome = getTransactionsByMonth(transaction, currentMonth-1, currentYear);
+  const latestIncome = getTransactionsByMonth(transaction, currentMonth, currentYear);
+  const previousNetIncome = getTotalByType(previousIncome, "Income");
+  const latestNetIncome = getTotalByType(latestIncome, "Income");
+  const monthlyIncomeChange = latestNetIncome - previousNetIncome;
+  const monthlyIncomeChangePercentage = getPercentage(previousNetIncome, latestNetIncome)
+  //Expense
+  const previousExpense = getTransactionsByMonth(transaction, currentMonth-1, currentYear);
+  const latestExpense = getTransactionsByMonth(transaction, currentMonth, currentYear);
+  const previousNetExpense = getTotalByType(previousExpense, "Expense");
+  const latestNetExpense = getTotalByType(latestExpense, "Expense");
+  const monthlyExpenseChange = latestNetIncome - previousNetExpense;
+  const monthlyExpenseChangePercentage = getPercentage(previousNetExpense, latestNetExpense)
+  //Saving
+  const latestNetSaving = latestNetIncome - latestNetExpense;
+  const previousNetSaving = previousNetIncome - previousNetExpense;
+  const monthlySavingChange = latestNetSaving - previousNetSaving;
+  const monthlySavingChangePercentage = getPercentage(previousNetSaving, latestNetSaving)
 
   return (
     <div className="h-screen bg-red-200 rounded-xl">
@@ -27,14 +49,14 @@ const Hero = () => {
           <Input type="text" className="pl-8" placeholder="Search anything" />
         </div>
         <Link to={'profile'}>
-        <div className="flex items-center justify-center border px-2">
-          <div className="px-1">
-            <img src="/Logo.png" width={'15px'} height={'15px'} className="rounded" />
+          <div className="flex items-center justify-center border px-2">
+            <div className="px-1">
+              <img src="/Logo.png" width={'15px'} height={'15px'} className="rounded" />
+            </div>
+            <div>
+              {user?.name}
+            </div>
           </div>
-          <div>
-            {user?.name}
-          </div>
-        </div>
         </Link>
       </div>
 
@@ -50,7 +72,7 @@ const Hero = () => {
             </p>
           </div>
           <div>
-            <TransactionDialog/>
+            <TransactionDialog />
           </div>
         </div>
 
@@ -60,29 +82,29 @@ const Hero = () => {
           <div className="flex flex-col flex-1 border">
             {/* Left top section */}
             <div className="flex gap-10 p-1">
-              <DashboardCards 
-              title="Income"
-              amount={income}
-              percentage={10.5}
-              change={487}
+              <DashboardCards
+                title="Income"
+                amount={latestNetIncome}
+                percentage={monthlyIncomeChangePercentage}
+                change={monthlyIncomeChange}
               />
-              <DashboardCards 
-              title="Expense"
-              amount={expense}
-              percentage={10.5}
-              change={487}
+              <DashboardCards
+                title="Expense"
+                amount={latestNetExpense}
+                percentage={monthlyExpenseChangePercentage}
+                change={monthlyExpenseChange}
               />
-              <DashboardCards 
-              title="Saving"
-              amount={saving}
-              percentage={10.5}
-              change={487}
+              <DashboardCards
+                title="Saving"
+                amount={latestNetSaving}
+                percentage={monthlySavingChangePercentage}
+                change={monthlySavingChange}
               />
             </div>
 
             {/* Left bottom section */}
             <div>
-              <DemoPage/>
+              <DemoPage />
             </div>
           </div>
 
@@ -90,12 +112,12 @@ const Hero = () => {
           <div className="w-125">
             {/* Right top Section */}
             <div>
-              <RadarCharts/>
+              <ChartRadialStacked/>
             </div>
 
             {/* Right bottom Section */}
             <div>
-              <RadarCharts/>
+              <ExpenseByCategoryChart />
             </div>
           </div>
         </div>

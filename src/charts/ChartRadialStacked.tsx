@@ -1,17 +1,12 @@
-import { TrendingUp } from "lucide-react"
-import {
-  Label,
-  PolarRadiusAxis,
-  RadialBar,
-  RadialBarChart,
-} from "recharts"
+import { LabelList, Pie, PieChart } from "recharts"
+
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
+  CardDescription,
 } from "@/components/ui/card"
 import {
   ChartContainer,
@@ -19,106 +14,136 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart"
+import { useTransactionStore } from "@/store/transactionStore"
+import { getTotalByMethod } from "@/utils/transaction.utils"
 
-export const description = "A radial chart with stacked sections"
-
-const chartData = [{ month: "january", salary: 23570, freelance: 2300, others: 3580 }]
 
 const chartConfig = {
-  salary: {
-    label: "salary",
-    color: "green",
+  online: {
+    label: "Online",
+    color: "#2563EB",
   },
-  freelance: {
-    label: "freelance",
-    color: "var(--chart-2)",
-  },
-  others: {
-    label: "others",
-    color: "var(--chart-1)",
+  cash: {
+    label: "Cash",
+    color: "#16A34A",
   },
 } satisfies ChartConfig
 
 export function ChartRadialStacked() {
-  const totalIncome = chartData[0].salary + chartData[0].freelance + chartData[0].others
+  const currentMonth = new Date().toLocaleString("en-US", {
+    month: "long",
+  })
+
+  const currentYear = new Date().getFullYear()
+
+  const transactions = useTransactionStore(
+    (state) => state.transactions
+  )
+
+  const totalOnlineTransactions = getTotalByMethod(
+    transactions,
+    "Online"
+  )
+
+  const totalCashTransactions = getTotalByMethod(
+    transactions,
+    "Cash"
+  )
+
+  const totalTransactions =
+    totalOnlineTransactions + totalCashTransactions
+
+  const chartData = [
+    {
+      type: "online",
+      transactions: totalOnlineTransactions,
+      fill: "var(--color-online)",
+    },
+    {
+      type: "cash",
+      transactions: totalCashTransactions,
+      fill: "var(--color-cash)",
+    },
+  ]
+
+  const formatCurrency = (value: number) =>
+    `₹${value.toLocaleString("en-IN")}`
 
   return (
-    <Card className="flex flex-col">
-      <CardHeader className="items-center pb-0">
-        <CardTitle> Income Breakdown</CardTitle>
-        <CardDescription>August 2026</CardDescription>
+    <Card className="flex flex-col overflow-hidden border-0 shadow-sm">
+      <CardHeader className="items-center pb-2">
+        <CardTitle className="text-base font-semibold">
+          Transactions by Payment Method
+        </CardTitle>
+
+        <CardDescription>
+          {currentMonth} {currentYear}
+        </CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-1 items-center pb-0">
+
+      <CardContent className="flex-1 pb-2">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square w-full max-w-[250px]"
+          className="mx-auto aspect-square max-h-[260px] [&_.recharts-text]:fill-background"
         >
-          <RadialBarChart
-            data={chartData}
-            endAngle={180}
-            innerRadius={80}
-            outerRadius={110}
-          >
-            <RadialBar
-              dataKey="others"
-              stackId="a"
-              cornerRadius={5}
-              fill="var(--color-others)"
-              className="stroke-transparent stroke-2"
-            />
-            <RadialBar
-              dataKey="freelance"
-              fill="var(--color-freelance)"
-              stackId="a"
-              cornerRadius={5}
-              className="stroke-transparent stroke-2"
-            />
-            <RadialBar
-              dataKey="salary"
-              stackId="a"
-              cornerRadius={5}
-              fill="var(--color-salary)"
-              className="stroke-transparent stroke-2"
-            />
+          <PieChart>
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent hideLabel />}
+              content={
+                <ChartTooltipContent
+                  nameKey="type"
+                  hideLabel
+                  formatter={(value, name) => (
+                    <div className="flex w-full items-center justify-between gap-6">
+                      <span className="text-muted-foreground">
+                        {chartConfig[
+                          name as keyof typeof chartConfig
+                        ]?.label ?? name}
+                      </span>
+
+                      <span className="font-mono font-medium tabular-nums">
+                        ₹{Number(value).toLocaleString("en-IN")}
+                      </span>
+                    </div>
+                  )}
+                />
+              }
             />
-            <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
-              <Label
-                content={({ viewBox }) => {
-                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                    return (
-                      <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle">
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) - 16}
-                          className="fill-foreground text-2xl font-bold"
-                        >
-                          {`₹${totalIncome.toLocaleString()}`}
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 4}
-                          className="fill-muted-foreground"
-                        >
-                          Total Income
-                        </tspan>
-                      </text>
-                    )
-                  }
-                }}
+
+            <Pie
+              data={chartData}
+              dataKey="transactions"
+              nameKey="type"
+              innerRadius={55}
+              outerRadius={95}
+              paddingAngle={3}
+              strokeWidth={2}
+              stroke="hsl(var(--background))"
+            >
+              <LabelList
+                dataKey="type"
+                className="fill-background"
+                stroke="none"
+                fontSize={12}
+                fontWeight={600}
+                formatter={(value) =>
+                  chartConfig[
+                    value as keyof typeof chartConfig
+                  ]?.label
+                }
               />
-            </PolarRadiusAxis>
-          </RadialBarChart>
+            </Pie>
+          </PieChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 leading-none font-medium">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+
+      <CardFooter className="flex-col gap-1 border-t bg-muted/30 px-6 py-4">
+        <div className="text-2xl font-bold tracking-tight">
+          {formatCurrency(totalTransactions)}
         </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total income for this month
+
+        <div className="text-center text-xs text-muted-foreground">
+          Total transaction amount for {currentMonth}
         </div>
       </CardFooter>
     </Card>

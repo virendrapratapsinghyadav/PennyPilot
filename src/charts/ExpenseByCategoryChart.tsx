@@ -1,4 +1,11 @@
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts"
+import {
+    Bar,
+    BarChart,
+    CartesianGrid,
+    LabelList,
+    XAxis,
+    YAxis,
+} from "recharts"
 import {
     Card,
     CardContent,
@@ -12,23 +19,13 @@ import {
     ChartTooltipContent,
     type ChartConfig,
 } from "@/components/ui/chart"
-
-
-const chartData = [
-    { category: "Groceries", amount: 2750 },
-    { category: "EatingOut", amount: 2000 },
-    { category: "BeverageSnacks", amount: 800 },
-    { category: "Clothing", amount: 1730 },
-    { category: "Shoes", amount: 2750 },
-    { category: "Fuel", amount: 800 },
-    { category: "PublicTransport", amount: 2300 },
-    { category: "Others", amount: 400 },
-]
+import { useTransactionStore } from "@/store/transactionStore"
+import { getExpenseByCategory } from "@/utils/transaction.utils"
 
 const chartConfig = {
     amount: {
         label: "Amount",
-        color: "green",
+        color: "hsl(0 72% 60%)",
     },
 } satisfies ChartConfig
 
@@ -50,11 +47,17 @@ const formatINR = (value: number) =>
         maximumFractionDigits: 0,
     }).format(value)
 
-
-
 export function ExpenseByCategoryChart() {
+    const transactions = useTransactionStore((state) => state.transactions)
 
-    
+    const expensesByCategory = getExpenseByCategory(transactions)
+
+    const chartData = Object.entries(expensesByCategory).map(
+        ([category, amount]) => ({
+            category,
+            amount,
+        }),
+    )
 
     return (
         <Card>
@@ -68,15 +71,15 @@ export function ExpenseByCategoryChart() {
             <CardContent>
                 <ChartContainer
                     config={chartConfig}
-                    className="aspect-auto h-50 md:h-80 w-full"
+                    className="aspect-auto h-50 w-full md:h-80"
                 >
                     <BarChart
                         accessibilityLayer
                         data={chartData}
                         layout="vertical"
                         margin={{
-                            right: 60,
                             left: 2,
+                            right: 60,
                         }}
                     >
                         <CartesianGrid horizontal={false} />
@@ -86,7 +89,6 @@ export function ExpenseByCategoryChart() {
                             type="category"
                             hide
                         />
-                        
 
                         <XAxis
                             dataKey="amount"
@@ -100,7 +102,9 @@ export function ExpenseByCategoryChart() {
                             cursor={false}
                             content={
                                 <ChartTooltipContent
-                                    formatter={(value) => formatINR(Number(value))}
+                                    formatter={(value) =>
+                                        formatINR(Number(value))
+                                    }
                                 />
                             }
                         />
@@ -116,15 +120,21 @@ export function ExpenseByCategoryChart() {
                                 offset={12}
                                 className="fill-white font-medium"
                                 fontSize={12}
-                                formatter={(value) => categoryLabels[String(value)] ?? String(value)}
+                                formatter={(value) =>
+                                    categoryLabels[String(value)] ??
+                                    String(value)
+                                }
                             />
+
                             <LabelList
                                 dataKey="amount"
                                 position="right"
                                 offset={8}
                                 className="fill-foreground"
                                 fontSize={12}
-                                formatter={(value) => formatINR(Number(value))}
+                                formatter={(value) =>
+                                    formatINR(Number(value))
+                                }
                             />
                         </Bar>
                     </BarChart>

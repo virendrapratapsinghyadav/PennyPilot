@@ -7,6 +7,25 @@ export const getTotalByType = (transactions: Payment[], type: string) => {
     .reduce((total, transaction) => total + transaction.amount, 0);
 };
 
+//ByCurrentMonth TotalbyMethod
+export const getTotalByMethod = (transactions: Payment[], method: string) => {
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
+
+  return transactions
+    .filter((transaction) => {
+      const date = new Date(transaction.date);
+
+      return (
+        transaction.method === method &&
+        date.getMonth() === currentMonth &&
+        date.getFullYear() === currentYear
+      );
+    })
+    .reduce((total, transaction) => total + transaction.amount, 0);
+};
+
 //ByCurrentMonth utility
 export const getTransactionsByMonth = (
   transactions: Payment[],
@@ -22,10 +41,7 @@ export const getTransactionsByMonth = (
 };
 
 //Percentage Utility
-export const getPercentage = (
-  previousMonth: number,
-  currentMonth: number,
-) => {
+export const getPercentage = (previousMonth: number, currentMonth: number) => {
   if (previousMonth === 0) {
     return "0.00";
   }
@@ -48,31 +64,23 @@ export const getExpenseByCategory = (transactions: Payment[]) => {
   return result;
 };
 
-export const calculateDaily = (
-  transactions: Payment[],
-  type: string,
-) => {
-  return transactions.reduce<Record<string, number>>(
-    (acc, transaction) => {
-      if (transaction.type !== type) return acc;
+export const calculateDaily = (transactions: Payment[], type: string) => {
+  return transactions.reduce<Record<string, number>>((acc, transaction) => {
+    if (transaction.type !== type) return acc;
 
-      const date = transaction.date;
+    const date = transaction.date;
 
-      const dateKey = [
-        date.getFullYear(),
-        String(date.getMonth() + 1).padStart(2, "0"),
-        String(date.getDate()).padStart(2, "0"),
-      ].join("-");
+    const dateKey = [
+      date.getFullYear(),
+      String(date.getMonth() + 1).padStart(2, "0"),
+      String(date.getDate()).padStart(2, "0"),
+    ].join("-");
 
-      acc[dateKey] =
-        (acc[dateKey] ?? 0) + Number(transaction.amount);
+    acc[dateKey] = (acc[dateKey] ?? 0) + Number(transaction.amount);
 
-      return acc;
-    },
-    {},
-  );
+    return acc;
+  }, {});
 };
-
 
 export const calculateMonthly = (transactions: Payment[], type: string) => {
   const currentYear = new Date().getFullYear();
@@ -117,11 +125,92 @@ export const calculateSavingRate = (
     const savingAmount = saving[month] ?? 0;
 
     savingRate[month] =
-      incomeAmount === 0
-        ? 0
-        : (savingAmount / incomeAmount) * 100;
+      incomeAmount === 0 ? 0 : (savingAmount / incomeAmount) * 100;
   }
 
   return savingRate;
 };
+
+//Main Chart Functions
+
+//Income
+export const calculateYearly = (
+  transactions: Payment[],
+  type: string,
+  currentYear: number,
+) => {
+  const yearlyTransactions = transactions.filter((transaction) => {
+    const transactionYear = transaction.date.getFullYear();
+    return transaction.type === type && transactionYear === currentYear;
+  });
+  return yearlyTransactions;
+};
+
+
+
+//RANGE CALCULATOR WITH TYPE
+
+type Period = "week" | "month" | "quater" | "year"
+type TransactionType = "Income" | "Expense"
+
+export const calculateByPeriod = (
+  transactions: Payment[],
+  type: TransactionType,
+  period: Period,
+  date = new Date()
+) => {
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const day = date.getDate();
+
+  return transactions.filter((transaction) => {
+    const transactionDate = transaction.date;
+    
+    if(transaction.type !== type) {
+      return false;
+    }
+
+    //weekly
+    if(period === "week") {
+
+      const startOfWeek = new Date(date);
+      startOfWeek.setDate(day - startOfWeek.getDay());
+      startOfWeek.setHours(0, 0, 0, 0);
+
+      const endOfWeek = new Date(startOfWeek);
+      endOfWeek.setDate(startOfWeek.getDate() + 7);
+
+      return transactionDate >= startOfWeek && transactionDate < endOfWeek;
+    }
+
+    //monthly
+    if(period === "month") {
+      return (
+        transactionDate.getMonth() === month &&
+        transactionDate.getFullYear() === year
+      );
+    }
+
+    //quaterly
+    if(period === "quater") {
+      const currentQuater = Math.floor(month/3);
+      const transactionQuater = Math.floor(
+        transactionDate.getMonth()/3
+      );
+
+      return (
+        transactionQuater === currentQuater &&
+        transactionDate.getFullYear() === year
+      );
+    }
+
+    //yearly
+    if(period === "year") {
+      return transactionDate.getFullYear() === year;
+    }
+
+    return false;
+    
+  })
+}
 

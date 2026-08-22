@@ -1,6 +1,9 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
+import { useTransactionStore } from "@/store/transactionStore";
+import { calculateByPeriod } from "@/utils/transaction.utils";
+import { useState } from "react";
 import { AreaChart, CartesianGrid, XAxis, Area } from "recharts"
 
 
@@ -109,9 +112,17 @@ const chartConfig = {
     },
 } satisfies ChartConfig
 
-
+type Period = "week" | "month" |"quater" | "year"
 
 export function MainChart() {
+
+    const transactions = useTransactionStore((state)=>state.transactions)
+
+    const[period, setPeriod] = useState<Period>("month");
+    const income = calculateByPeriod(transactions, "Income", period);
+    const expense = calculateByPeriod(transactions, "Expense", period);
+    console.log(income)
+    console.log(expense)
 
     return (
         <Card className="pt-0">

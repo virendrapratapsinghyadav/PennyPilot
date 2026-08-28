@@ -1,32 +1,26 @@
-import { Button } from "@/components/ui/button"
-import { Link } from "react-router-dom"
+import ContactSection from "@/landing/ContactSection";
+import FeaturesSection from "@/landing/FeaturesSection";
+import Footer from "@/landing/Footer";
+import HeroSection from "@/landing/HeroSection";
+import NavBar from "@/landing/NavBar";
+import PricingSection from "@/landing/PricingSection";
+import TryItSection from "@/landing/TryItSection";
+import UseCaseSection from "@/landing/UseCaseSection";
 
 
-const Landing = () => {
+export default function Landing() {
   return (
-    <div>
-      <div className="">
-        <div className='bg-[#10B981]'>
-          Landing Page PennyPilot - Take control of every rupee with AI-powered financial insights.
-        </div>
-        <Link to={'/signup'}>
-          <Button>
-            SignUp
-          </Button>
-        </Link>
-        <Link to={'/login'}>
-          <Button>
-            Login
-          </Button>
-        </Link>
-        <Link to={`/dashboard/userIdleke ao`}>
-          <Button>
-            Dashboard
-          </Button>
-        </Link>
-      </div>
+    <div className="min-h-screen bg-[#050505] font-sans antialiased">
+      <NavBar />
+      <main>
+        <HeroSection />
+        <FeaturesSection />
+        <UseCaseSection />
+        <TryItSection />
+        <PricingSection />
+        <ContactSection />
+      </main>
+      <Footer />
     </div>
-  )
+  );
 }
-
-export default Landing

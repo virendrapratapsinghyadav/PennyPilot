@@ -6,6 +6,7 @@ import {
     XAxis,
     YAxis,
 } from "recharts"
+
 import {
     Card,
     CardContent,
@@ -13,19 +14,21 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
+
 import {
     ChartContainer,
     ChartTooltip,
     ChartTooltipContent,
     type ChartConfig,
 } from "@/components/ui/chart"
+
 import { useTransactionStore } from "@/store/transactionStore"
 import { getExpenseByCategory } from "@/utils/transaction.utils"
 
 const chartConfig = {
     amount: {
         label: "Amount",
-        color: "hsl(0 72% 60%)",
+        color: "var(--chart-1)",
     },
 } satisfies ChartConfig
 
@@ -48,7 +51,9 @@ const formatINR = (value: number) =>
     }).format(value)
 
 export function ExpenseByCategoryChart() {
-    const transactions = useTransactionStore((state) => state.transactions)
+    const transactions = useTransactionStore(
+        (state) => state.transactions
+    )
 
     const expensesByCategory = getExpenseByCategory(transactions)
 
@@ -60,29 +65,83 @@ export function ExpenseByCategoryChart() {
     )
 
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Expenses by Category</CardTitle>
-                <CardDescription>
+        <Card
+            className="
+                brutal-card
+                overflow-hidden
+                rounded-none
+                border-2
+                py-0
+            "
+        >
+            <CardHeader
+                className="
+                    border-b-2
+                    border-[var(--border)]
+                    bg-[var(--card)]
+                    px-5
+                    py-5
+                "
+            >
+                <CardTitle
+                    className="
+                        text-lg
+                        font-black
+                        uppercase
+                        tracking-tight
+                        text-[var(--foreground)]
+                    "
+                >
+                    Expenses by Category
+                </CardTitle>
+
+                <CardDescription
+                    className="
+                        text-sm
+                        font-medium
+                        text-[var(--muted-foreground)]
+                    "
+                >
                     Your spending breakdown for the selected period
                 </CardDescription>
             </CardHeader>
 
-            <CardContent>
+            <CardContent
+                className="
+                    bg-[var(--card)]
+                    px-3
+                    py-5
+                    sm:px-5
+                    sm:py-6
+                "
+            >
                 <ChartContainer
                     config={chartConfig}
-                    className="aspect-auto h-50 w-full md:h-80"
+                    className="
+                        aspect-auto
+                        h-[280px]
+                        w-full
+                        md:h-[360px]
+                    "
                 >
                     <BarChart
                         accessibilityLayer
                         data={chartData}
                         layout="vertical"
                         margin={{
-                            left: 2,
-                            right: 60,
+                            left: 4,
+                            right: 70,
+                            top: 4,
+                            bottom: 4,
                         }}
+                        barCategoryGap="18%"
                     >
-                        <CartesianGrid horizontal={false} />
+                        <CartesianGrid
+                            horizontal={false}
+                            stroke="var(--border)"
+                            strokeOpacity={0.18}
+                            strokeDasharray="4 4"
+                        />
 
                         <YAxis
                             dataKey="category"
@@ -94,14 +153,36 @@ export function ExpenseByCategoryChart() {
                             dataKey="amount"
                             type="number"
                             tickLine={false}
-                            axisLine={false}
-                            tickFormatter={(value) => `₹${value}`}
+                            axisLine={{
+                                stroke: "var(--border)",
+                                strokeWidth: 2,
+                            }}
+                            tick={{
+                                fill: "var(--muted-foreground)",
+                                fontSize: 11,
+                                fontWeight: 700,
+                            }}
+                            tickFormatter={(value) =>
+                                `₹${Number(value).toLocaleString("en-IN")}`
+                            }
                         />
 
                         <ChartTooltip
-                            cursor={false}
+                            cursor={{
+                                fill: "var(--primary)",
+                                fillOpacity: 0.08,
+                            }}
                             content={
                                 <ChartTooltipContent
+                                    className="
+                                        w-[170px]
+                                        rounded-none
+                                        border-2
+                                        border-[var(--border)]
+                                        bg-[var(--card)]
+                                        text-[var(--foreground)]
+                                        shadow-[4px_4px_0_var(--shadow-color)]
+                                    "
                                     formatter={(value) =>
                                         formatINR(Number(value))
                                     }
@@ -112,14 +193,20 @@ export function ExpenseByCategoryChart() {
                         <Bar
                             dataKey="amount"
                             fill="var(--color-amount)"
-                            radius={6}
+                            radius={0}
+                            stroke="var(--border)"
+                            strokeWidth={1}
                         >
                             <LabelList
                                 dataKey="category"
                                 position="insideLeft"
-                                offset={12}
-                                className="fill-white font-medium"
-                                fontSize={12}
+                                offset={10}
+                                className="
+                                    fill-[var(--primary-foreground)]
+                                    font-black
+                                    uppercase
+                                "
+                                fontSize={11}
                                 formatter={(value) =>
                                     categoryLabels[String(value)] ??
                                     String(value)
@@ -129,9 +216,12 @@ export function ExpenseByCategoryChart() {
                             <LabelList
                                 dataKey="amount"
                                 position="right"
-                                offset={8}
-                                className="fill-foreground"
-                                fontSize={12}
+                                offset={10}
+                                className="
+                                    fill-[var(--foreground)]
+                                    font-black
+                                "
+                                fontSize={11}
                                 formatter={(value) =>
                                     formatINR(Number(value))
                                 }

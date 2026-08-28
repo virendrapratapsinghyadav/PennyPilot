@@ -54,102 +54,125 @@ const FEATURES: Feature[] = [
   },
 ];
 
-const ACCENT = "#ccff00";
+const CLIP_PATH =
+  "polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px)";
 
 export default function FeaturesSection() {
   return (
-    <section id="features" className="bg-[#050505] py-14 md:py-18">
-      {/* Top divider */}
+    <section
+      id="features"
+      className="bg-background py-14 md:py-20"
+    >
+      {/* ───────────────── Top Divider ───────────────── */}
       <div className="mx-auto mb-12 max-w-7xl px-4 sm:px-8">
         <div
-          className="h-px w-full"
+          className="h-px w-full bg-primary/20"
           style={{
-            background:
-              "linear-gradient(to right, transparent, rgba(204,255,0,0.3), transparent)",
+            maskImage:
+              "linear-gradient(to right, transparent, black 20%, black 80%, transparent)",
+            WebkitMaskImage:
+              "linear-gradient(to right, transparent, black 20%, black 80%, transparent)",
           }}
         />
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-8">
-        {/* Section Header */}
-        <div className="mb-20 text-center">
-          <p
-            className="mb-4 text-[11px] font-black uppercase tracking-[0.35em]"
-            style={{ color: ACCENT }}
-          >
+        {/* ───────────────── Section Header ───────────────── */}
+        <div className="mb-16 text-center md:mb-20">
+          <p className="mb-4 text-[11px] font-black uppercase tracking-[0.35em] text-primary">
             Smart Finance
           </p>
 
-          <h2 className="mb-5 text-4xl font-black uppercase tracking-tighter text-white sm:text-5xl md:text-6xl">
+          <h2 className="mb-5 text-4xl font-black uppercase tracking-tighter text-foreground sm:text-5xl md:text-6xl">
             Everything You Need
             <br />
-            <span style={{ color: ACCENT }}>
+            <span className="text-primary">
               to Master Your Money
             </span>
           </h2>
 
-          <p className="mx-auto max-w-xl text-base leading-relaxed text-zinc-500 font-sans">
+          <p className="mx-auto max-w-xl font-sans text-base leading-relaxed text-muted-foreground">
             PennyPilot combines transaction tracking, powerful analytics,
             interactive dashboards, and AI-powered insights to help you
             understand and improve your financial habits.
           </p>
         </div>
 
-        {/* Feature Grid */}
+        {/* ───────────────── Feature Grid ───────────────── */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map((feature) => {
             const Icon = feature.icon;
 
             return (
-              <div
+              <article
                 key={feature.title}
-                className="group relative p-7 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1"
+                className={`
+                  group
+                  relative
+                  overflow-hidden
+                  p-7
+                  backdrop-blur-sm
+                  transition-all
+                  duration-300
+                  hover:-translate-y-1
+                  ${
+                    feature.highlight
+                      ? "border border-primary/35 bg-primary/[0.06]"
+                      : "border border-border bg-card"
+                  }
+                `}
                 style={{
-                  background: feature.highlight
-                    ? "linear-gradient(135deg, rgba(204,255,0,0.08) 0%, rgba(204,255,0,0.02) 100%)"
-                    : "rgba(255,255,255,0.03)",
-                  border: feature.highlight
-                    ? "1px solid rgba(204,255,0,0.35)"
-                    : "1px solid rgba(255,255,255,0.08)",
-                  clipPath:
-                    "polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px)",
+                  clipPath: CLIP_PATH,
                 }}
               >
-                {/* Highlighted Card Corner */}
+                {/* ───────── Highlight Corner ───────── */}
                 {feature.highlight && (
                   <>
-                    <div
-                      className="absolute top-0 left-0 w-10 h-px"
-                      style={{ background: ACCENT }}
-                    />
-                    <div
-                      className="absolute top-0 left-0 h-10 w-px"
-                      style={{ background: ACCENT }}
-                    />
+                    <div className="absolute left-0 top-0 h-px w-10 bg-primary" />
+                    <div className="absolute left-0 top-0 h-10 w-px bg-primary" />
                   </>
                 )}
 
-                {/* Hover Border */}
+                {/* ───────── Hover Border ───────── */}
                 <div
-                  className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  className="
+                    pointer-events-none
+                    absolute
+                    inset-0
+                    border
+                    border-primary
+                    opacity-0
+                    transition-opacity
+                    duration-300
+                    group-hover:opacity-100
+                  "
                   style={{
-                    border: `1.5px solid ${ACCENT}`,
-                    clipPath:
-                      "polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px)",
+                    clipPath: CLIP_PATH,
                   }}
                 />
 
-                {/* Icon */}
+                {/* ───────── Icon ───────── */}
                 <div
-                  className="relative z-10 mb-5 inline-flex h-11 w-11 items-center justify-center transition-colors duration-300 group-hover:border-[#ccff00]/50 group-hover:text-[#ccff00]"
-                  style={{
-                    border: feature.highlight
-                      ? "1px solid rgba(204,255,0,0.5)"
-                      : "1px solid rgba(255,255,255,0.1)",
-                    color: feature.highlight
-                      ? ACCENT
-                      : "#71717a",
-                  }}
+                  className={`
+                    relative
+                    z-10
+                    mb-5
+                    inline-flex
+                    h-11
+                    w-11
+                    items-center
+                    justify-center
+                    border
+                    transition-all
+                    duration-300
+                    ${
+                      feature.highlight
+                        ? "border-primary/50 text-primary"
+                        : "border-border text-muted-foreground"
+                    }
+                    group-hover:border-primary/60
+                    group-hover:text-primary
+                  `}
                 >
                   <Icon
                     className="h-5 w-5"
@@ -157,23 +180,54 @@ export default function FeaturesSection() {
                   />
                 </div>
 
-                {/* Title */}
+                {/* ───────── Title ───────── */}
                 <h3
-                  className="relative z-10 mb-2 text-[15px] font-black uppercase tracking-wide"
-                  style={{
-                    color: feature.highlight ? ACCENT : "#ffffff",
-                  }}
+                  className={`
+                    relative
+                    z-10
+                    mb-2
+                    text-[15px]
+                    font-black
+                    uppercase
+                    tracking-wide
+                    transition-colors
+                    duration-300
+                    ${
+                      feature.highlight
+                        ? "text-primary"
+                        : "text-foreground"
+                    }
+                    group-hover:text-primary
+                  `}
                 >
                   {feature.title}
                 </h3>
 
-                {/* Description */}
-                <p className="relative z-10 text-sm leading-relaxed text-zinc-500 font-sans">
+                {/* ───────── Description ───────── */}
+                <p className="relative z-10 font-sans text-sm leading-relaxed text-muted-foreground">
                   {feature.description}
                 </p>
 
-                {/* Bottom Explore */}
-                <div className="relative z-10 mt-6 flex items-center gap-1.5 text-xs font-black uppercase tracking-widest text-zinc-600 transition-all duration-200 group-hover:gap-2.5 group-hover:text-[#ccff00]">
+                {/* ───────── Explore ───────── */}
+                <div
+                  className="
+                    relative
+                    z-10
+                    mt-6
+                    flex
+                    items-center
+                    gap-1.5
+                    text-xs
+                    font-black
+                    uppercase
+                    tracking-widest
+                    text-muted-foreground/60
+                    transition-all
+                    duration-200
+                    group-hover:gap-2.5
+                    group-hover:text-primary
+                  "
+                >
                   <span>Explore</span>
 
                   <svg
@@ -190,7 +244,22 @@ export default function FeaturesSection() {
                     />
                   </svg>
                 </div>
-              </div>
+
+                {/* ───────── Bottom Accent ───────── */}
+                {feature.highlight && (
+                  <div
+                    className="
+                      absolute
+                      bottom-0
+                      right-0
+                      h-px
+                      w-16
+                      bg-primary
+                      opacity-70
+                    "
+                  />
+                )}
+              </article>
             );
           })}
         </div>

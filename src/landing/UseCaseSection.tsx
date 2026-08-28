@@ -38,93 +38,197 @@ const USE_CASES: UseCase[] = [
   },
 ];
 
-const ACCENT = "#ccff00";
+const CLIP_PATH =
+  "polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px))";
 
 export default function UseCaseSection() {
   return (
-    <section className="bg-[#050505] py-14 md:py-18">
-      {/* Top divider */}
+    <section className="bg-background py-14 md:py-20">
+      {/* ───────────────── Top Divider ───────────────── */}
       <div className="mx-auto mb-12 max-w-7xl px-4 sm:px-8">
         <div
-          className="h-px w-full"
+          className="h-px w-full bg-primary/20"
           style={{
-            background:
-              "linear-gradient(to right, transparent, rgba(204,255,0,0.3), transparent)",
+            maskImage:
+              "linear-gradient(to right, transparent, black 20%, black 80%, transparent)",
+            WebkitMaskImage:
+              "linear-gradient(to right, transparent, black 20%, black 80%, transparent)",
           }}
         />
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-8">
-        {/* Header */}
-        <div className="mb-16">
-          <p
-            className="mb-4 text-[11px] font-black uppercase tracking-[0.35em]"
-            style={{ color: ACCENT }}
-          >
-            Features
+        {/* ───────────────── Header ───────────────── */}
+        <div className="mb-16 max-w-3xl">
+          <p className="mb-4 text-[11px] font-black uppercase tracking-[0.35em] text-primary">
+            How PennyPilot Works
           </p>
 
-          <h2 className="mb-5 text-4xl font-black uppercase tracking-tighter text-white sm:text-5xl md:text-6xl">
+          <h2 className="mb-5 text-4xl font-black uppercase tracking-tighter text-foreground sm:text-5xl md:text-6xl">
             Built for Smarter
             <br />
-            <span style={{ color: ACCENT }}>Financial Decisions</span>
+            <span className="text-primary">
+              Financial Decisions
+            </span>
           </h2>
 
-          <p className="max-w-xl text-base leading-relaxed text-zinc-500 font-sans">
+          <p className="max-w-xl font-sans text-base leading-relaxed text-muted-foreground">
             PennyPilot brings transaction tracking, powerful analytics, and
             AI-powered financial intelligence together in one simple dashboard.
           </p>
         </div>
 
-        {/* 2 × 2 grid */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          {USE_CASES.map((uc) => {
-            const Icon = uc.icon;
+        {/* ───────────────── Use Cases ───────────────── */}
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          {USE_CASES.map((useCase, index) => {
+            const Icon = useCase.icon;
 
             return (
-              <div
-                key={uc.title}
-                className="group relative p-8 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1"
+              <article
+                key={useCase.title}
+                className="
+                  group
+                  relative
+                  min-h-[250px]
+                  overflow-hidden
+                  border
+                  border-border
+                  bg-card
+                  p-7
+                  transition-all
+                  duration-300
+                  hover:-translate-y-1
+                  hover:border-primary/50
+                  sm:p-8
+                "
                 style={{
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                  clipPath:
-                    "polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px))",
+                  clipPath: CLIP_PATH,
                 }}
               >
-                {/* Subtle border glow on hover */}
+                {/* ───────── Background Accent ───────── */}
                 <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                  className="
+                    pointer-events-none
+                    absolute
+                    -right-16
+                    -top-16
+                    h-40
+                    w-40
+                    rounded-full
+                    bg-primary
+                    opacity-0
+                    blur-3xl
+                    transition-opacity
+                    duration-500
+                    group-hover:opacity-[0.07]
+                  "
+                />
+
+                {/* ───────── Index ───────── */}
+                <span
+                  className="
+                    absolute
+                    right-7
+                    top-6
+                    font-mono
+                    text-[10px]
+                    font-bold
+                    tracking-[0.2em]
+                    text-muted-foreground/40
+                  "
+                >
+                  0{index + 1}
+                </span>
+
+                {/* ───────── Hover Border ───────── */}
+                <div
+                  className="
+                    pointer-events-none
+                    absolute
+                    inset-0
+                    border
+                    border-primary
+                    opacity-0
+                    transition-opacity
+                    duration-300
+                    group-hover:opacity-100
+                  "
                   style={{
-                    border: `1.5px solid ${ACCENT}`,
-                    clipPath:
-                      "polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px))",
+                    clipPath: CLIP_PATH,
                   }}
                 />
 
-                {/* Icon */}
+                {/* ───────── Icon ───────── */}
                 <div
-                  className="mb-6 inline-flex h-11 w-11 items-center justify-center transition-colors duration-300 group-hover:border-[#ccff00]/50 group-hover:text-[#ccff00]"
-                  style={{
-                    border: "1px solid rgba(255,255,255,0.1)",
-                    color: "#71717a",
-                  }}
+                  className="
+                    relative
+                    z-10
+                    mb-6
+                    inline-flex
+                    h-11
+                    w-11
+                    items-center
+                    justify-center
+                    border
+                    border-border
+                    text-muted-foreground
+                    transition-all
+                    duration-300
+                    group-hover:border-primary/60
+                    group-hover:bg-primary/5
+                    group-hover:text-primary
+                  "
                 >
-                  <Icon className="h-5 w-5" strokeWidth={1.75} />
+                  <Icon
+                    className="h-5 w-5"
+                    strokeWidth={1.75}
+                  />
                 </div>
 
-                {/* Title */}
-                <h3 className="mb-3 text-lg font-black uppercase tracking-wide text-white">
-                  {uc.title}
+                {/* ───────── Title ───────── */}
+                <h3
+                  className="
+                    relative
+                    z-10
+                    mb-3
+                    text-lg
+                    font-black
+                    uppercase
+                    tracking-wide
+                    text-foreground
+                    transition-colors
+                    duration-300
+                    group-hover:text-primary
+                  "
+                >
+                  {useCase.title}
                 </h3>
 
-                {/* Description */}
-                <p className="text-sm leading-relaxed text-zinc-500 font-sans">
-                  {uc.description}
+                {/* ───────── Description ───────── */}
+                <p className="relative z-10 max-w-lg font-sans text-sm leading-relaxed text-muted-foreground">
+                  {useCase.description}
                 </p>
 
-                {/* Cyber arrow */}
-                <div className="mt-6 flex items-center gap-1.5 text-xs font-black uppercase tracking-widest text-zinc-500 transition-all duration-200 group-hover:text-[#ccff00] group-hover:gap-2.5">
+                {/* ───────── Explore ───────── */}
+                <div
+                  className="
+                    relative
+                    z-10
+                    mt-6
+                    flex
+                    items-center
+                    gap-1.5
+                    text-xs
+                    font-black
+                    uppercase
+                    tracking-widest
+                    text-muted-foreground/60
+                    transition-all
+                    duration-200
+                    group-hover:gap-2.5
+                    group-hover:text-primary
+                  "
+                >
                   <span>Explore</span>
 
                   <svg
@@ -141,7 +245,22 @@ export default function UseCaseSection() {
                     />
                   </svg>
                 </div>
-              </div>
+
+                {/* ───────── Bottom Accent ───────── */}
+                <div
+                  className="
+                    absolute
+                    bottom-0
+                    left-0
+                    h-px
+                    w-0
+                    bg-primary
+                    transition-all
+                    duration-300
+                    group-hover:w-20
+                  "
+                />
+              </article>
             );
           })}
         </div>

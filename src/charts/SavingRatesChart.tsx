@@ -1,5 +1,12 @@
 import { TrendingUp } from "lucide-react"
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts"
+import {
+  CartesianGrid,
+  Line,
+  LineChart,
+  XAxis,
+  YAxis,
+} from "recharts"
+
 import {
   Card,
   CardContent,
@@ -21,7 +28,8 @@ import {
 } from "@/utils/transaction.utils"
 import { useTransactionStore } from "@/store/transactionStore"
 
-export const description = "A linear line chart showing monthly savings and saving rate"
+export const description =
+  "A linear line chart showing monthly savings and saving rate"
 
 const monthNames = [
   "Jan",
@@ -74,15 +82,18 @@ export function SavingRatesChart() {
   }))
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Saving Rates</CardTitle>
-        <CardDescription>
+    <Card className="brutal-card w-full overflow-hidden rounded-none">
+      <CardHeader className="border-b-2 border-border bg-primary/15 rounded-none">
+        <CardTitle className="text-base font-bold tracking-tight sm:text-lg">
+          Saving Rates
+        </CardTitle>
+
+        <CardDescription className="text-xs font-medium text-muted-foreground sm:text-sm">
           January - Present, 2026
         </CardDescription>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="p-4 sm:p-6">
         <ChartContainer
           config={chartConfig}
           className="aspect-auto h-50 w-full md:h-70"
@@ -97,13 +108,22 @@ export function SavingRatesChart() {
               bottom: 12,
             }}
           >
-            <CartesianGrid vertical={false} />
+            <CartesianGrid
+              vertical={false}
+              stroke="var(--border)"
+              strokeOpacity={0.25}
+            />
 
             <XAxis
               dataKey="month"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
+              tick={{
+                fill: "var(--muted-foreground)",
+                fontSize: 11,
+                fontWeight: 600,
+              }}
               tickFormatter={(value) => value.slice(0, 3)}
             />
 
@@ -112,6 +132,14 @@ export function SavingRatesChart() {
               tickLine={false}
               axisLine={false}
               tickMargin={8}
+              tick={{
+                fill: "var(--muted-foreground)",
+                fontSize: 11,
+                fontWeight: 600,
+              }}
+              tickFormatter={(value) =>
+                `₹${Number(value).toLocaleString("en-IN")}`
+              }
             />
 
             <YAxis
@@ -121,19 +149,36 @@ export function SavingRatesChart() {
               axisLine={false}
               tickMargin={8}
               domain={[0, "auto"]}
+              tick={{
+                fill: "var(--muted-foreground)",
+                fontSize: 11,
+                fontWeight: 600,
+              }}
               tickFormatter={(value) => `${value}%`}
             />
 
             <ChartTooltip
-              cursor={false}
+              cursor={{
+                stroke: "var(--primary)",
+                strokeWidth: 1.5,
+                strokeDasharray: "4 4",
+              }}
               content={
                 <ChartTooltipContent
+                  className="brutal-card"
+                  indicator="dot"
                   formatter={(value, name) => {
                     if (name === "savingRates") {
-                      return [`${Number(value).toFixed(1)}%`, "Saving Rate"]
+                      return [
+                        `${Number(value).toFixed(1)}%`,
+                        "Saving Rate",
+                      ]
                     }
 
-                    return [`₹${Number(value).toLocaleString()}`, "Saving"]
+                    return [
+                      `₹${Number(value).toLocaleString("en-IN")}`,
+                      "Saving",
+                    ]
                   }}
                 />
               }
@@ -144,8 +189,19 @@ export function SavingRatesChart() {
               dataKey="saving"
               type="linear"
               stroke="var(--color-saving)"
-              strokeWidth={2}
-              dot={false}
+              strokeWidth={3}
+              dot={{
+                r: 3,
+                fill: "var(--color-saving)",
+                stroke: "var(--foreground)",
+                strokeWidth: 1.5,
+              }}
+              activeDot={{
+                r: 5,
+                fill: "var(--primary)",
+                stroke: "var(--foreground)",
+                strokeWidth: 2,
+              }}
             />
 
             <Line
@@ -153,20 +209,36 @@ export function SavingRatesChart() {
               dataKey="savingRates"
               type="linear"
               stroke="var(--color-savingRates)"
-              strokeWidth={2}
-              dot={false}
+              strokeWidth={3}
+              dot={{
+                r: 3,
+                fill: "var(--color-savingRates)",
+                stroke: "var(--foreground)",
+                strokeWidth: 1.5,
+              }}
+              activeDot={{
+                r: 5,
+                fill: "var(--primary)",
+                stroke: "var(--foreground)",
+                strokeWidth: 2,
+              }}
             />
           </LineChart>
         </ChartContainer>
       </CardContent>
 
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          Track your monthly savings and saving rate
-          <TrendingUp className="h-4 w-4" />
+      <CardFooter className="flex-col items-start gap-2 border-t-2 border-border bg-muted/50 px-4 py-4 text-xs sm:px-6 sm:text-sm">
+        <div className="flex items-center gap-2 font-bold leading-none">
+          <span>
+            Track your monthly savings and saving rate
+          </span>
+
+          <span className="flex h-6 w-6 shrink-0 items-center justify-center border-2 border-border bg-primary shadow-[2px_2px_0_var(--shadow-color)]">
+            <TrendingUp className="h-3.5 w-3.5" />
+          </span>
         </div>
 
-        <div className="leading-none text-muted-foreground">
+        <div className="font-medium leading-none text-muted-foreground">
           Comparing savings and saving rate throughout 2026
         </div>
       </CardFooter>

@@ -138,47 +138,148 @@ export function ChartBarInteractive() {
   )
 
   return (
-    <Card className="py-0">
-      <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
-                <div className="grid flex-1 gap-1">
-                    <CardTitle>Area Chart - Interactive</CardTitle>
-                    <CardDescription>
-                        Showing total transaction types
-                    </CardDescription>
-                </div>
-            </CardHeader>
-      <CardContent className="px-2 sm:p-6">
+    <Card
+      className="
+        brutal-card
+        overflow-hidden
+        rounded-none
+        border-2
+        py-0
+      "
+    >
+      <CardHeader
+        className="
+          flex flex-col gap-4
+          border-b-2
+          border-[var(--border)]
+          bg-[var(--card)]
+          px-5 py-5
+          sm:flex-row sm:items-center
+        "
+      >
+        <div className="grid flex-1 gap-1">
+          <CardTitle
+            className="
+              text-lg font-black uppercase
+              tracking-tight
+              text-[var(--foreground)]
+            "
+          >
+            Transaction Activity
+          </CardTitle>
+
+          <CardDescription
+            className="
+              text-sm font-medium
+              text-[var(--muted-foreground)]
+            "
+          >
+            Showing total transaction types
+          </CardDescription>
+        </div>
+
+        <div
+          className="
+            flex w-full
+            border-2 border-[var(--border)]
+            bg-[var(--muted)]
+            p-1
+            sm:w-auto
+          "
+        >
+          {(["desktop", "mobile"] as const).map((type) => (
+            <button
+              key={type}
+              type="button"
+              onClick={() => setActiveChart(type)}
+              className={`
+                brutal-button
+                min-w-[100px]
+                border-2
+                px-3 py-2
+                text-xs font-black
+                uppercase tracking-wider
+                ${
+                  activeChart === type
+                    ? "bg-[var(--primary)] text-[var(--primary-foreground)]"
+                    : "border-transparent bg-transparent text-[var(--muted-foreground)] shadow-none"
+                }
+              `}
+            >
+              {chartConfig[type].label}
+            </button>
+          ))}
+        </div>
+      </CardHeader>
+
+      <CardContent
+        className="
+          bg-[var(--card)]
+          px-2 pb-5 pt-5
+          sm:p-6
+        "
+      >
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-[250px] w-full"
+          className="aspect-auto h-[280px] w-full"
         >
           <BarChart
             accessibilityLayer
             data={chartData}
             margin={{
-              left: 12,
-              right: 12,
+              left: 8,
+              right: 8,
+              top: 8,
+              bottom: 0,
             }}
           >
-            <CartesianGrid vertical={false} />
+            <CartesianGrid
+              vertical={false}
+              stroke="var(--border)"
+              strokeOpacity={0.18}
+              strokeDasharray="4 4"
+            />
+
             <XAxis
               dataKey="date"
               tickLine={false}
-              axisLine={false}
-              tickMargin={8}
+              axisLine={{
+                stroke: "var(--border)",
+                strokeWidth: 2,
+              }}
+              tickMargin={10}
               minTickGap={32}
+              tick={{
+                fill: "var(--muted-foreground)",
+                fontSize: 11,
+                fontWeight: 700,
+              }}
               tickFormatter={(value) => {
                 const date = new Date(value)
+
                 return date.toLocaleDateString("en-US", {
                   month: "short",
                   day: "numeric",
                 })
               }}
             />
+
             <ChartTooltip
+              cursor={{
+                fill: "var(--primary)",
+                fillOpacity: 0.08,
+              }}
               content={
                 <ChartTooltipContent
-                  className="w-[150px]"
+                  className="
+                    w-[160px]
+                    rounded-none
+                    border-2
+                    border-[var(--border)]
+                    bg-[var(--card)]
+                    text-[var(--foreground)]
+                    shadow-[4px_4px_0_var(--shadow-color)]
+                  "
                   nameKey="views"
                   labelFormatter={(value) => {
                     return new Date(value).toLocaleDateString("en-US", {
@@ -190,7 +291,14 @@ export function ChartBarInteractive() {
                 />
               }
             />
-            <Bar dataKey={activeChart} fill={`var(--color-${activeChart})`} />
+
+            <Bar
+              dataKey={activeChart}
+              fill={`var(--color-${activeChart})`}
+              radius={0}
+              stroke="var(--border)"
+              strokeWidth={1}
+            />
           </BarChart>
         </ChartContainer>
       </CardContent>

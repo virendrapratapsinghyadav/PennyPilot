@@ -8,24 +8,25 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card"
+
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart"
+
 import { useTransactionStore } from "@/store/transactionStore"
 import { getTotalByMethod } from "@/utils/transaction.utils"
-
 
 const chartConfig = {
   online: {
     label: "Online",
-    color: "#2563EB",
+    color: "var(--chart-4)",
   },
   cash: {
     label: "Cash",
-    color: "#16A34A",
+    color: "var(--chart-1)",
   },
 } satisfies ChartConfig
 
@@ -70,21 +71,68 @@ export function ChartRadialStacked() {
     `₹${value.toLocaleString("en-IN")}`
 
   return (
-    <Card className="flex flex-col overflow-hidden border-0 shadow-sm">
-      <CardHeader className="items-center pb-2">
-        <CardTitle className="text-base font-semibold">
+    <Card
+      className="
+        brutal-card
+        flex flex-col
+        overflow-hidden
+        rounded-none
+        border-2
+        py-0
+      "
+    >
+      <CardHeader
+        className="
+          border-b-2
+          border-[var(--border)]
+          bg-[var(--card)]
+          px-5 py-5
+          text-left
+        "
+      >
+        <CardTitle
+          className="
+            text-lg
+            font-black
+            uppercase
+            tracking-tight
+            text-[var(--foreground)]
+          "
+        >
           Transactions by Payment Method
         </CardTitle>
 
-        <CardDescription>
+        <CardDescription
+          className="
+            text-sm
+            font-medium
+            text-[var(--muted-foreground)]
+          "
+        >
           {currentMonth} {currentYear}
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="flex-1 pb-2">
+      <CardContent
+        className="
+          flex flex-1
+          items-center
+          justify-center
+          bg-[var(--card)]
+          px-4
+          pb-4
+          pt-6
+        "
+      >
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[260px] [&_.recharts-text]:fill-background"
+          className="
+            mx-auto
+            aspect-square
+            w-full
+            max-h-[280px]
+            [&_.recharts-text]:fill-[var(--foreground)]
+          "
         >
           <PieChart>
             <ChartTooltip
@@ -93,15 +141,42 @@ export function ChartRadialStacked() {
                 <ChartTooltipContent
                   nameKey="type"
                   hideLabel
+                  className="
+                    rounded-none
+                    border-2
+                    border-[var(--border)]
+                    bg-[var(--card)]
+                    text-[var(--foreground)]
+                    shadow-[4px_4px_0_var(--shadow-color)]
+                  "
                   formatter={(value, name) => (
-                    <div className="flex w-full items-center justify-between gap-6">
-                      <span className="text-muted-foreground">
+                    <div
+                      className="
+                        flex w-full
+                        items-center
+                        justify-between
+                        gap-6
+                      "
+                    >
+                      <span
+                        className="
+                          font-medium
+                          text-[var(--muted-foreground)]
+                        "
+                      >
                         {chartConfig[
                           name as keyof typeof chartConfig
                         ]?.label ?? name}
                       </span>
 
-                      <span className="font-mono font-medium tabular-nums">
+                      <span
+                        className="
+                          font-mono
+                          font-black
+                          tabular-nums
+                          text-[var(--foreground)]
+                        "
+                      >
                         ₹{Number(value).toLocaleString("en-IN")}
                       </span>
                     </div>
@@ -114,18 +189,22 @@ export function ChartRadialStacked() {
               data={chartData}
               dataKey="transactions"
               nameKey="type"
-              innerRadius={55}
-              outerRadius={95}
+              innerRadius={58}
+              outerRadius={98}
               paddingAngle={3}
               strokeWidth={2}
-              stroke="hsl(var(--background))"
+              stroke="var(--card)"
             >
               <LabelList
                 dataKey="type"
-                className="fill-background"
+                className="
+                  fill-[var(--primary-foreground)]
+                  font-black
+                  uppercase
+                "
                 stroke="none"
-                fontSize={12}
-                fontWeight={600}
+                fontSize={11}
+                fontWeight={800}
                 formatter={(value) =>
                   chartConfig[
                     value as keyof typeof chartConfig
@@ -137,12 +216,38 @@ export function ChartRadialStacked() {
         </ChartContainer>
       </CardContent>
 
-      <CardFooter className="flex-col gap-1 border-t bg-muted/30 px-6 py-4">
-        <div className="text-2xl font-bold tracking-tight">
+      <CardFooter
+        className="
+          flex-col
+          gap-1
+          border-t-2
+          border-border
+          rounded-none
+          bg-muted
+          px-5 py-4
+        "
+      >
+        <div
+          className="
+            text-2xl
+            font-black
+            tracking-tight
+            text-foreground
+          "
+        >
           {formatCurrency(totalTransactions)}
         </div>
 
-        <div className="text-center text-xs text-muted-foreground">
+        <div
+          className="
+            text-center
+            text-xs
+            font-medium
+            uppercase
+            tracking-wide
+            text-[var(--muted-foreground)]
+          "
+        >
           Total transaction amount for {currentMonth}
         </div>
       </CardFooter>

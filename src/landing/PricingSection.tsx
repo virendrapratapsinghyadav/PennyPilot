@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check } from "lucide-react";
+import { Check, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 type Plan = {
@@ -19,7 +19,8 @@ const PLANS: Plan[] = [
     name: "Free",
     monthlyPrice: 0,
     yearlyPrice: 0,
-    description: "Everything you need to start tracking your finances.",
+    description:
+      "Everything you need to start tracking your finances.",
     features: [
       "Track income & expenses",
       "Basic dashboard",
@@ -35,7 +36,8 @@ const PLANS: Plan[] = [
     name: "Pro",
     monthlyPrice: 9,
     yearlyPrice: 7,
-    description: "Powerful AI insights for smarter financial decisions.",
+    description:
+      "Powerful AI insights for smarter financial decisions.",
     features: [
       "Everything in Free",
       "AI spending analysis",
@@ -53,7 +55,8 @@ const PLANS: Plan[] = [
     name: "Premium",
     monthlyPrice: 19,
     yearlyPrice: 15,
-    description: "Complete financial intelligence for serious tracking.",
+    description:
+      "Complete financial intelligence for serious tracking.",
     features: [
       "Everything in Pro",
       "Advanced AI insights",
@@ -68,84 +71,125 @@ const PLANS: Plan[] = [
   },
 ];
 
-const ACCENT = "#ccff00";
+const CARD_CLIP =
+  "polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px)";
+
+const BUTTON_CLIP =
+  "polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%)";
 
 export default function PricingSection() {
   const [isYearly, setIsYearly] = useState(false);
 
   return (
-    <section id="pricing" className="bg-[#050505] py-14 md:py-18">
-      {/* Top divider */}
-      <div className="mx-auto mb-12 max-w-7xl px-4 sm:px-8">
+    <section
+      id="pricing"
+      className="bg-background py-16 md:py-24"
+    >
+      {/* ───────────────── Top Divider ───────────────── */}
+      <div className="mx-auto mb-14 max-w-7xl px-4 sm:px-8">
         <div
-          className="h-px w-full"
+          className="h-px w-full bg-primary/20"
           style={{
-            background:
-              "linear-gradient(to right, transparent, rgba(204,255,0,0.3), transparent)",
+            maskImage:
+              "linear-gradient(to right, transparent, black 20%, black 80%, transparent)",
+            WebkitMaskImage:
+              "linear-gradient(to right, transparent, black 20%, black 80%, transparent)",
           }}
         />
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-8">
-        {/* Header */}
-        <div className="mb-16 text-center">
-          <p
-            className="mb-4 text-[11px] font-black uppercase tracking-[0.35em]"
-            style={{ color: ACCENT }}
-          >
+        {/* ───────────────── Header ───────────────── */}
+        <div className="mb-14 text-center md:mb-16">
+          <p className="mb-4 text-[11px] font-black uppercase tracking-[0.35em] text-primary">
             Pricing
           </p>
 
-          <h2 className="mb-4 text-4xl font-black uppercase tracking-tighter text-white sm:text-5xl md:text-6xl">
+          <h2 className="mb-5 text-4xl font-black uppercase tracking-tighter text-foreground sm:text-5xl md:text-6xl">
             Simple Plans
             <br />
-            <span style={{ color: ACCENT }}>Smarter Finances</span>
+            <span className="text-primary">
+              Smarter Finances
+            </span>
           </h2>
 
-          <p className="mx-auto mb-10 max-w-xl text-base text-zinc-500 font-sans">
-            Choose the right PennyPilot plan to track your money, understand
-            your spending, and unlock AI-powered financial insights.
+          <p className="mx-auto mb-9 max-w-xl font-sans text-base leading-relaxed text-muted-foreground">
+            Choose the right PennyPilot plan to track your money,
+            understand your spending, and unlock AI-powered financial
+            insights.
           </p>
 
-          {/* Billing Toggle */}
+          {/* ───────────────── Billing Toggle ───────────────── */}
           <div
-            className="inline-flex items-center gap-1 p-1"
-            style={{
-              border: "1px solid rgba(204,255,0,0.2)",
-              background: "rgba(204,255,0,0.03)",
-            }}
+            className="
+              inline-flex
+              items-center
+              gap-1
+              border
+              border-primary/20
+              bg-primary/[0.03]
+              p-1
+            "
           >
             <button
+              type="button"
               onClick={() => setIsYearly(false)}
-              className="px-6 py-2.5 text-sm font-bold uppercase tracking-wide transition-all"
-              style={
-                !isYearly
-                  ? { background: ACCENT, color: "#000" }
-                  : { color: "#71717a" }
-              }
+              className={`
+                px-6
+                py-2.5
+                text-xs
+                font-black
+                uppercase
+                tracking-widest
+                transition-all
+                duration-200
+                ${
+                  !isYearly
+                    ? "bg-primary text-primary-foreground shadow-[2px_2px_0_hsl(var(--foreground)/0.15)]"
+                    : "text-muted-foreground hover:text-foreground"
+                }
+              `}
             >
               Monthly
             </button>
 
             <button
+              type="button"
               onClick={() => setIsYearly(true)}
-              className="flex items-center gap-2 px-6 py-2.5 text-sm font-bold uppercase tracking-wide transition-all"
-              style={
-                isYearly
-                  ? { background: ACCENT, color: "#000" }
-                  : { color: "#71717a" }
-              }
+              className={`
+                flex
+                items-center
+                gap-2
+                px-6
+                py-2.5
+                text-xs
+                font-black
+                uppercase
+                tracking-widest
+                transition-all
+                duration-200
+                ${
+                  isYearly
+                    ? "bg-primary text-primary-foreground shadow-[2px_2px_0_hsl(var(--foreground)/0.15)]"
+                    : "text-muted-foreground hover:text-foreground"
+                }
+              `}
             >
               Yearly
 
               <span
-                className="px-2 py-0.5 text-[10px] font-black"
-                style={{
-                  border: isYearly
-                    ? "1px solid rgba(0,0,0,0.3)"
-                    : "1px solid rgba(204,255,0,0.3)",
-                  color: isYearly ? "#000" : ACCENT,
-                }}
+                className={`
+                  border
+                  px-2
+                  py-0.5
+                  text-[9px]
+                  font-black
+                  ${
+                    isYearly
+                      ? "border-primary-foreground/30 text-primary-foreground"
+                      : "border-primary/30 text-primary"
+                  }
+                `}
               >
                 20% OFF
               </span>
@@ -153,129 +197,174 @@ export default function PricingSection() {
           </div>
         </div>
 
-        {/* Cards */}
-        <div className="grid items-stretch grid-cols-1 gap-6 md:grid-cols-3">
-          {PLANS.map((plan) => {
+        {/* ───────────────── Plans ───────────────── */}
+        <div className="grid grid-cols-1 items-stretch gap-5 md:grid-cols-3">
+          {PLANS.map((plan, index) => {
             const price = isYearly
               ? plan.yearlyPrice
               : plan.monthlyPrice;
 
             return (
-              <div
+              <article
                 key={plan.name}
-                className="group relative flex h-full min-h-[570px] flex-col overflow-visible p-8 transition-transform duration-300 hover:-translate-y-1"
+                className={`
+                  group
+                  relative
+                  flex
+                  min-h-[570px]
+                  flex-col
+                  overflow-hidden
+                  p-7
+                  transition-all
+                  duration-300
+                  hover:-translate-y-1
+                  md:p-8
+                  ${
+                    plan.highlighted
+                      ? "border border-primary/50 bg-primary/[0.045]"
+                      : "border border-border bg-card"
+                  }
+                `}
                 style={{
-                  background: "rgba(255,255,255,0.03)",
-                  border: plan.highlighted
-                    ? "1px solid rgba(204,255,0,0.45)"
-                    : "1px solid rgba(255,255,255,0.08)",
-                  clipPath:
-                    "polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px)",
+                  clipPath: CARD_CLIP,
                 }}
               >
-                {/* Hover outline */}
+                {/* ───────── Pro Glow ───────── */}
+                {plan.highlighted && (
+                  <div
+                    className="
+                      pointer-events-none
+                      absolute
+                      -right-20
+                      -top-20
+                      h-56
+                      w-56
+                      rounded-full
+                      bg-primary
+                      opacity-[0.07]
+                      blur-3xl
+                    "
+                  />
+                )}
+
+                {/* ───────── Hover Border ───────── */}
                 <div
-                  className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  className="
+                    pointer-events-none
+                    absolute
+                    inset-0
+                    border
+                    border-primary
+                    opacity-0
+                    transition-opacity
+                    duration-300
+                    group-hover:opacity-100
+                  "
                   style={{
-                    border: `1.5px solid ${ACCENT}`,
-                    clipPath:
-                      "polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px)",
+                    clipPath: CARD_CLIP,
                   }}
                 />
 
-                {/* Pro corner accents */}
+                {/* ───────── Pro Corner Accents ───────── */}
                 {plan.highlighted && (
                   <>
-                    <div
-                      className="absolute left-0 top-0 h-px w-12"
-                      style={{ background: ACCENT }}
-                    />
+                    <div className="absolute left-0 top-0 h-px w-14 bg-primary" />
+                    <div className="absolute left-0 top-0 h-14 w-px bg-primary" />
 
-                    <div
-                      className="absolute left-0 top-0 h-12 w-px"
-                      style={{ background: ACCENT }}
-                    />
-
-                    <div
-                      className="absolute bottom-0 right-0 h-px w-12"
-                      style={{ background: ACCENT }}
-                    />
-
-                    <div
-                      className="absolute bottom-0 right-0 h-12 w-px"
-                      style={{ background: ACCENT }}
-                    />
+                    <div className="absolute bottom-0 right-0 h-px w-14 bg-primary" />
+                    <div className="absolute bottom-0 right-0 h-14 w-px bg-primary" />
                   </>
                 )}
 
-                {/* Badge - inside card */}
-                <div className="relative z-10 mb-5 h-7">
-                  {plan.badge && (
-                    <span
-                      className="inline-block px-4 py-1 text-[10px] font-black uppercase tracking-widest text-black"
-                      style={{
-                        background: ACCENT,
-                      }}
-                    >
-                      {plan.badge}
-                    </span>
-                  )}
-                </div>
-
-                {/* Plan Header */}
-                <div className="relative z-10 min-h-[90px]">
-                  <h3
-                    className="text-lg font-black uppercase tracking-wider"
-                    style={{
-                      color: plan.highlighted ? ACCENT : "#fff",
-                    }}
-                  >
-                    {plan.name}
-                  </h3>
-
-                  <p className="mt-2 text-sm leading-relaxed text-zinc-500 font-sans">
-                    {plan.description}
-                  </p>
-                </div>
-
-                {/* Price */}
-                <div className="relative z-10 mb-8 min-h-[90px]">
-                  <div className="flex items-end gap-2">
-                    <span className="text-5xl font-black tracking-tight text-white">
-                      {price === 0 ? "Free" : `$${price}`}
+                <div className="relative z-10">
+                  {/* ───────── Plan Number ───────── */}
+                  <div className="mb-5 flex items-center justify-between">
+                    <span className="font-mono text-[10px] font-bold tracking-[0.2em] text-muted-foreground/40">
+                      0{index + 1}
                     </span>
 
-                    {price > 0 && (
-                      <span className="mb-1.5 text-sm text-zinc-500 font-sans">
-                        / month
+                    {plan.badge && (
+                      <span className="bg-primary px-3 py-1 text-[9px] font-black uppercase tracking-widest text-primary-foreground">
+                        {plan.badge}
                       </span>
                     )}
                   </div>
 
-                  {isYearly && price > 0 && (
-                    <p className="mt-1 text-xs text-zinc-600 font-sans">
-                      Billed annually — ${price * 12} / year
+                  {/* ───────── Plan Header ───────── */}
+                  <div className="min-h-[105px]">
+                    <h3
+                      className={`
+                        text-lg
+                        font-black
+                        uppercase
+                        tracking-wider
+                        ${
+                          plan.highlighted
+                            ? "text-primary"
+                            : "text-foreground"
+                        }
+                      `}
+                    >
+                      {plan.name}
+                    </h3>
+
+                    <p className="mt-2 font-sans text-sm leading-relaxed text-muted-foreground">
+                      {plan.description}
                     </p>
-                  )}
+                  </div>
+
+                  {/* ───────── Price ───────── */}
+                  <div className="mb-8 min-h-[95px]">
+                    <div className="flex items-end gap-2">
+                      <span className="text-5xl font-black tracking-tight text-foreground">
+                        {price === 0 ? "Free" : `$${price}`}
+                      </span>
+
+                      {price > 0 && (
+                        <span className="mb-1.5 font-sans text-sm text-muted-foreground">
+                          / month
+                        </span>
+                      )}
+                    </div>
+
+                    {isYearly && price > 0 && (
+                      <p className="mt-1 font-sans text-xs text-muted-foreground/60">
+                        Billed annually — ${price * 12} / year
+                      </p>
+                    )}
+                  </div>
                 </div>
 
-                {/* Features */}
+                {/* ───────── Features ───────── */}
                 <ul className="relative z-10 flex-1 space-y-3">
-                  {plan.features.map((feat) => (
+                  {plan.features.map((feature) => (
                     <li
-                      key={feat}
-                      className="flex items-start gap-3 text-sm text-zinc-300 font-sans"
+                      key={feature}
+                      className="
+                        flex
+                        items-start
+                        gap-3
+                        font-sans
+                        text-sm
+                        text-foreground/80
+                      "
                     >
                       <span
-                        className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center"
-                        style={{
-                          border: plan.highlighted
-                            ? "1px solid rgba(204,255,0,0.4)"
-                            : "1px solid rgba(255,255,255,0.1)",
-                          color: plan.highlighted
-                            ? ACCENT
-                            : "#71717a",
-                        }}
+                        className={`
+                          mt-0.5
+                          flex
+                          h-5
+                          w-5
+                          shrink-0
+                          items-center
+                          justify-center
+                          border
+                          ${
+                            plan.highlighted
+                              ? "border-primary/50 text-primary"
+                              : "border-border text-muted-foreground"
+                          }
+                        `}
                       >
                         <Check
                           className="h-3 w-3"
@@ -283,38 +372,61 @@ export default function PricingSection() {
                         />
                       </span>
 
-                      <span>{feat}</span>
+                      <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
 
-                {/* CTA */}
+                {/* ───────── CTA ───────── */}
                 <div className="relative z-10 mt-8">
                   <Link
                     to={plan.href}
-                    className="block w-full py-3.5 text-center text-sm font-black uppercase tracking-widest transition-all duration-200 hover:opacity-90 active:scale-95"
+                    className={`
+                      flex
+                      w-full
+                      items-center
+                      justify-center
+                      gap-2
+                      py-3.5
+                      text-center
+                      text-xs
+                      font-black
+                      uppercase
+                      tracking-widest
+                      transition-all
+                      duration-200
+                      active:scale-[0.98]
+                      ${
+                        plan.highlighted
+                          ? "bg-primary text-primary-foreground hover:opacity-90"
+                          : "border border-border text-foreground hover:border-primary/50 hover:bg-primary/5 hover:text-primary"
+                      }
+                    `}
                     style={
                       plan.highlighted
-                        ? {
-                            background: ACCENT,
-                            color: "#000",
-                            clipPath:
-                              "polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%)",
-                          }
-                        : {
-                            border:
-                              "1px solid rgba(255,255,255,0.15)",
-                            color: "#fff",
-                          }
+                        ? { clipPath: BUTTON_CLIP }
+                        : undefined
                     }
                   >
                     {plan.cta}
+
+                    <ArrowRight className="h-4 w-4" />
                   </Link>
                 </div>
-              </div>
+
+                {/* ───────── Bottom Accent ───────── */}
+                {plan.highlighted && (
+                  <div className="absolute bottom-0 left-0 h-px w-20 bg-primary" />
+                )}
+              </article>
             );
           })}
         </div>
+
+        {/* ───────── Pricing Note ───────── */}
+        <p className="mt-8 text-center font-sans text-xs text-muted-foreground/50">
+          No hidden fees. Cancel anytime. Your financial data stays yours.
+        </p>
       </div>
     </section>
   );

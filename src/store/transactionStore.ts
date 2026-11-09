@@ -20,3 +20,4 @@ export const useTransactionStore = create<TransactionStore>((set) => ({
 
   clearTransactions: () => set({ transactions: [] }),
 }));
+

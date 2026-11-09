@@ -7,8 +7,6 @@ const FOOTER_LINKS = [
   { label: "GitHub", href: "https://github.com" },
 ];
 
-const LOGO_CLIP =
-  "polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%)";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -33,37 +31,11 @@ export default function Footer() {
             <Link
               to="/"
               aria-label="PennyPilot home"
-              className="
-                group
-                flex
-                h-9
-                w-9
-                items-center
-                justify-center
-                overflow-hidden
-                border
-                border-border
-                bg-card
-                transition-colors
-                duration-200
-                hover:border-primary/50
-              "
-              style={{
-                clipPath: LOGO_CLIP,
-              }}
+              className="h-9 w-9"
             >
-              <img
-                src="/Logo.png"
-                alt="PennyPilot"
-                className="
-                  h-full
-                  w-full
-                  object-cover
-                  transition-transform
-                  duration-300
-                  group-hover:scale-110
-                "
-              />
+              <span className=" relative flex h-9 w-9 items-center justify-center border-2 border-border bg-primary text-primary-foreground shadow-[3px_3px_0_var(--shadow-color)] transition-transform group-hover:-translate-x-0.5 group-hover:-translate-y-0.5" >
+                <img src="/Logo.png" alt="logo" />
+              </span>
             </Link>
 
             <div className="flex flex-col">
@@ -79,7 +51,7 @@ export default function Footer() {
                   hover:text-primary
                 "
               >
-                PennyPilot
+                PennyPilot 
               </Link>
 
               <span className="mt-0.5 text-[10px] uppercase tracking-widest text-muted-foreground">

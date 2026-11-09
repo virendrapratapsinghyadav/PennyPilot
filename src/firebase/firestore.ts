@@ -1,5 +1,5 @@
 import { db } from  "./config";
-import  { doc, serverTimestamp, setDoc, getDoc } from "firebase/firestore";
+import  { doc, serverTimestamp, setDoc, getDoc, updateDoc } from "firebase/firestore";
 
 
 type createUserDocumentProps = {
@@ -9,7 +9,6 @@ type createUserDocumentProps = {
         email: string,
         profileURL: string
     }
-
 }
 
 type UserDocument = {
@@ -47,3 +46,13 @@ export const getUserDocument = async(uid: string): Promise<UserDocument | null>=
     }
     return null;
 }
+
+
+export const updateUserDocument = async (
+  uid: string,
+  user: Partial<Omit<UserDocument, "id">>
+): Promise<void> => {
+  const userRef = doc(db, "users", uid);
+
+  await updateDoc(userRef, user);
+};

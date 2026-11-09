@@ -16,7 +16,7 @@ interface DashboardCardProps {
   classname?: string
   title: string;
   amount: number;
-  percentage: number;
+  percentage: string;
   change: number;
 }
 
@@ -146,7 +146,7 @@ const DashboardCards = ({
             )}
 
             <span>
-              ₹{Math.abs(percentage).toFixed(2)}%
+              ₹{(percentage)}%
             </span>
           </span>
         </CardContent>

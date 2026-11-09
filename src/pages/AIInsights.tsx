@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from "react";
 import {
   ArrowUpRight,
   Brain,
@@ -9,7 +9,7 @@ import {
   TrendingDown,
   TrendingUp,
   Wallet,
-} from "lucide-react"
+} from "lucide-react";
 
 import {
   Card,
@@ -17,72 +17,63 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
-const GEMINI_API_KEY = "Gemini_KEYFROM GOOGLE"
+import { useTransactionStore } from "@/store/transactionStore";
+import { buildMonthlyContext } from "@/ai/contexts/monthlyContext";
+import { generateSpendingInsights } from "@/ai/aiService";
+
 
 const AIInsights = () => {
-  const [response, setResponse] = useState("")
-  const [loading, setLoading] = useState(false)
+  const [response, setResponse] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const testGemini = async () => {
-    setLoading(true)
-    setResponse("")
+  // Read transactions from the existing Zustand store.
+  const transactions = useTransactionStore(
+    (state) => state.transactions,
+  );
 
-    try {
-      const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${GEMINI_API_KEY}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            contents: [
-              {
-                parts: [
-                  {
-                    text: "Reply with exactly: Gemini API is working.",
-                  },
-                ],
-              },
-            ],
-          }),
-        }
-      )
+  const handleGenerateInsights = async () => {
+  if (loading) return;
 
-      const data = await res.json()
-
-      console.log("Status:", res.status)
-      console.log("Full response:", data)
-
-      if (!res.ok) {
-        throw new Error(
-          data?.error?.message || "Gemini request failed"
-        )
-      }
-
-      const text =
-        data?.candidates?.[0]?.content?.parts?.[0]?.text
-
-      if (!text) {
-        throw new Error("Gemini returned no text.")
-      }
-
-      setResponse(text)
-    } catch (error) {
-      console.error("Gemini error:", error)
-
-      setResponse(
-        error instanceof Error
-          ? error.message
-          : "Something went wrong."
-      )
-    } finally {
-      setLoading(false)
-    }
+  if (transactions.length === 0) {
+    setError("Add some transactions before generating insights.");
+    setResponse("");
+    return;
   }
+
+  setLoading(true);
+  setError("");
+  setResponse("");
+
+  try {
+    // The context builder handles the current and previous months.
+    const context = buildMonthlyContext(transactions, new Date());
+
+    const result = await generateSpendingInsights(context);
+
+    if (!result.trim()) {
+      throw new Error("The AI returned an empty response.");
+    }
+
+    setResponse(result.trim());
+  } catch (err) {
+    console.error("AI insights generation failed:", err);
+
+    const message =
+      err instanceof Error ? err.message : "Unknown error";
+
+    setError(
+      import.meta.env.DEV
+        ? `Unable to generate insights: ${message}`
+        : "Unable to generate insights right now. Please try again later.",
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <main className="min-h-screen bg-background p-4 sm:p-6 lg:p-8">
@@ -107,9 +98,9 @@ const AIInsights = () => {
           </div>
 
           <Button
-            onClick={testGemini}
-            disabled={loading}
-            className="brutal-button h-11 rounded-none bg-primary px-5 font-bold text-primary-foreground hover:bg-accent"
+            onClick={handleGenerateInsights}
+            disabled={loading || transactions.length === 0}
+            className="brutal-button h-11 rounded-none bg-primary px-5 font-bold text-primary-foreground hover:bg-accent hover:text-black"
           >
             {loading ? (
               <>
@@ -126,7 +117,7 @@ const AIInsights = () => {
         </section>
 
         {/* Main AI Card */}
-        <Card className="brutal-card rounded-none overflow-hidden">
+        <Card className="brutal-card overflow-hidden rounded-none">
           <CardHeader className="border-b-2 border-border bg-secondary">
             <div className="flex items-start gap-4">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center border-2 border-border bg-primary shadow-[3px_3px_0_var(--shadow-color)]">
@@ -147,8 +138,20 @@ const AIInsights = () => {
           </CardHeader>
 
           <CardContent className="p-5 sm:p-7">
-            {!response && !loading && (
-              <div className="flex min-h-[220px] flex-col items-center justify-center text-center">
+
+            {/* Error */}
+            {error && (
+              <div
+                role="alert"
+                className="mb-4 border-2 border-destructive bg-muted p-4 text-sm font-medium"
+              >
+                {error}
+              </div>
+            )}
+
+            {/* Empty State */}
+            {!response && !loading && !error && (
+              <div className="flex min-h-55 flex-col items-center justify-center text-center">
                 <div className="mb-4 flex h-16 w-16 items-center justify-center border-2 border-border bg-muted shadow-[4px_4px_0_var(--shadow-color)]">
                   <Lightbulb className="h-8 w-8 text-primary" />
                 </div>
@@ -161,11 +164,21 @@ const AIInsights = () => {
                   Generate an AI analysis to discover useful patterns
                   in your financial activity.
                 </p>
+
+                {transactions.length === 0 && (
+                  <p className="mt-3 text-xs font-semibold text-muted-foreground">
+                    Add a transaction to get started.
+                  </p>
+                )}
               </div>
             )}
 
+            {/* Loading State */}
             {loading && (
-              <div className="flex min-h-[220px] flex-col items-center justify-center text-center">
+              <div
+                className="flex min-h-55 flex-col items-center justify-center text-center"
+                aria-live="polite"
+              >
                 <div className="mb-5 flex h-16 w-16 items-center justify-center border-2 border-border bg-primary shadow-[4px_4px_0_var(--shadow-color)]">
                   <Loader2 className="h-8 w-8 animate-spin" />
                 </div>
@@ -180,6 +193,7 @@ const AIInsights = () => {
               </div>
             )}
 
+            {/* AI Response */}
             {response && !loading && (
               <div className="space-y-4">
                 <div className="flex items-center gap-2 text-sm font-bold">
@@ -192,6 +206,16 @@ const AIInsights = () => {
                     {response}
                   </p>
                 </div>
+
+                <Button
+                  variant="outline"
+                  onClick={handleGenerateInsights}
+                  disabled={loading || transactions.length === 0}
+                  className="rounded-none border-2 border-border font-bold"
+                >
+                  <Sparkles className="mr-2 h-4 w-4" />
+                  Regenerate Insights
+                </Button>
               </div>
             )}
           </CardContent>
@@ -204,6 +228,7 @@ const AIInsights = () => {
               <h2 className="text-xl font-black">
                 What your AI can analyze
               </h2>
+
               <p className="mt-1 text-sm text-muted-foreground">
                 Get a clearer picture of where your money goes.
               </p>
@@ -227,7 +252,7 @@ const AIInsights = () => {
 
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">
                   Identify your biggest spending categories and
-                  unusual expenses.
+                  understand how your expenses change each month.
                 </p>
               </CardContent>
             </Card>
@@ -246,8 +271,8 @@ const AIInsights = () => {
                 <h3 className="font-black">Savings</h3>
 
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  Track your saving behavior and discover ways to
-                  improve your saving rate.
+                  Track your saving behavior and discover practical
+                  ways to improve your saving rate.
                 </p>
               </CardContent>
             </Card>
@@ -266,13 +291,13 @@ const AIInsights = () => {
                 <h3 className="font-black">Income</h3>
 
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  Understand your income patterns and compare them
-                  against your expenses.
+                  Compare income against expenses to understand
+                  your monthly financial position.
                 </p>
               </CardContent>
             </Card>
 
-            {/* Habits */}
+            {/* Money Habits */}
             <Card className="brutal-card brutal-hover rounded-none">
               <CardContent className="p-5">
                 <div className="mb-5 flex items-center justify-between">
@@ -286,8 +311,8 @@ const AIInsights = () => {
                 <h3 className="font-black">Money Habits</h3>
 
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  Find recurring behaviors that may be helping or
-                  hurting your financial goals.
+                  Discover potential spending patterns and identify
+                  realistic opportunities to save.
                 </p>
               </CardContent>
             </Card>
@@ -304,24 +329,31 @@ const AIInsights = () => {
               </h2>
 
               <p className="mt-1 max-w-xl text-sm font-medium text-primary-foreground/75">
-                Your transaction history can reveal patterns that are
-                easy to miss when looking at individual expenses.
+                Your transaction history can reveal patterns that
+                are easy to miss when looking at individual expenses.
               </p>
             </div>
 
             <Button
-              onClick={testGemini}
-              disabled={loading}
+              onClick={handleGenerateInsights}
+              disabled={loading || transactions.length === 0}
               className="brutal-button shrink-0 rounded-none bg-card px-5 font-black text-foreground hover:bg-muted"
             >
-              {loading ? "Analyzing..." : "Analyze Finances"}
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Analyzing...
+                </>
+              ) : (
+                "Analyze Finances"
+              )}
             </Button>
           </CardContent>
         </Card>
 
       </div>
     </main>
-  )
-}
+  );
+};
 
-export default AIInsights
+export default AIInsights;

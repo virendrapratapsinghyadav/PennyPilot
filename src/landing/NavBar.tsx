@@ -16,7 +16,7 @@ export default function NavBar() {
 
   return (
     <nav className="fixed inset-x-0 top-0 z-50 border-b-2 border-border bg-background">
-      <div className="mx-auto flex h-[72px] max-w-[1600px] items-stretch">
+      <div className="mx-auto flex h-18 max-w-[1600px] items-stretch">
         {/* ───────────────── Logo ───────────────── */}
         <div className="flex shrink-0 items-center bg-background px-5 sm:px-8">
           <Link
@@ -26,38 +26,8 @@ export default function NavBar() {
             aria-label="PennyPilot Tracker home"
           >
             {/* Logo mark */}
-            <span
-              className="
-                relative
-                flex
-                h-9
-                w-9
-                items-center
-                justify-center
-                border-2
-                border-border
-                bg-primary
-                text-primary-foreground
-                shadow-[3px_3px_0_var(--shadow-color)]
-                transition-transform
-                group-hover:-translate-x-0.5
-                group-hover:-translate-y-0.5
-              "
-            >
-              <span className="text-lg font-black">$</span>
-
-              <span
-                className="
-                  absolute
-                  -right-1
-                  -top-1
-                  h-2
-                  w-2
-                  border
-                  border-border
-                  bg-background
-                "
-              />
+            <span className=" relative flex h-9 w-9 items-center justify-center border-2 border-border bg-primary text-primary-foreground shadow-[3px_3px_0_var(--shadow-color)] transition-transform group-hover:-translate-x-0.5 group-hover:-translate-y-0.5" >
+              <img src="/Logo.png" alt="logo" />
             </span>
 
             {/* Wordmark */}
@@ -65,9 +35,8 @@ export default function NavBar() {
               <span className="text-[17px] font-black uppercase tracking-[0.18em] text-foreground">
                 PennyPilot
               </span>
-
-              <span className="text-[17px] font-black uppercase tracking-[0.12em] text-primary">
-                Tracker
+              <span className="text-[17px] font-black uppercase tracking-[0.18em] text-green-600">
+                Ai
               </span>
             </span>
           </Link>
@@ -218,16 +187,10 @@ export default function NavBar() {
       <div
         id="mobile-navigation"
         className={`
-          overflow-hidden
-          border-t-2
-          border-border
-          bg-background
-          transition-all
-          duration-200
-          md:hidden
+          overflow-hidden border-t-2 border-border bg-background transition-all duration-200 md:hidden
           ${
             isOpen
-              ? "max-h-[500px] opacity-100"
+              ? "max-h-125 opacity-100"
               : "pointer-events-none max-h-0 opacity-0"
           }
         `}
@@ -240,24 +203,9 @@ export default function NavBar() {
               href={link.href}
               onClick={closeMenu}
               className="
-                flex
-                items-center
-                justify-between
-                border-2
-                border-border
-                bg-card
-                px-4
-                py-3
-                text-sm
-                font-black
-                uppercase
-                tracking-widest
-                text-foreground
-                transition-all
-                hover:translate-x-1
-                hover:bg-primary
-                hover:text-primary-foreground
-                hover:shadow-[3px_3px_0_var(--shadow-color)]
+                flex items-center justify-between border-2 border-border bg-card px-4 py-3 text-sm
+                font-black uppercase tracking-widest text-foreground
+                transition-all hover:translate-x-1 hover:bg-primary hover:text-primary-foreground hover:shadow-[3px_3px_0_var(--shadow-color)]
               "
             >
               <span>{link.label}</span>
@@ -273,19 +221,7 @@ export default function NavBar() {
             <Link
               to="/login"
               onClick={closeMenu}
-              className="
-                brutal-button
-                flex
-                items-center
-                justify-center
-                bg-card
-                py-3
-                text-sm
-                font-black
-                uppercase
-                tracking-wide
-                text-foreground
-              "
+              className=" brutal-button flex items-center justify-center bg-card py-3 text-sm font-black uppercase tracking-wide text-foreground "
             >
               Login
             </Link>
@@ -293,19 +229,7 @@ export default function NavBar() {
             <Link
               to="/signup"
               onClick={closeMenu}
-              className="
-                brutal-button
-                flex
-                items-center
-                justify-center
-                bg-primary
-                py-3
-                text-sm
-                font-black
-                uppercase
-                tracking-wide
-                text-primary-foreground
-              "
+              className=" brutal-button flex items-center justify-center bg-primary py-3 text-sm font-black uppercase tracking-wide text-primary-foreground "
             >
               Get Started
             </Link>

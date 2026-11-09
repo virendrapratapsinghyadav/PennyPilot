@@ -10,7 +10,8 @@ interface  UserProfileProps {
 interface  UserStoreProps {
     user: UserProfileProps | null,
     setUser: (user: UserProfileProps | null)=> void,
-    clearUser: ()=> void
+    clearUser: ()=> void;
+    updateUser: (updates: Partial<UserProfileProps>) => void;
 }
 
 export const useUserStore = create<UserStoreProps>((set)=>({
@@ -19,7 +20,12 @@ export const useUserStore = create<UserStoreProps>((set)=>({
 
     //Actions
     setUser: (user)=> set({user}),
-    clearUser: ()=> set({user: null})
+    clearUser: ()=> set({user: null}),
+    updateUser: (updates) => set((state) => ({
+        user: state.user
+        ? {...state.user, ...updates}
+        : null,
+    })),
 }));
 
 

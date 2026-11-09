@@ -13,32 +13,111 @@ import { Field, FieldLabel } from "./ui/field";
 import { Input } from "./ui/input";
 import { useUserStore } from "@/store/store";
 import { UserRound, Mail, LockKeyhole, ShieldCheck } from "lucide-react";
+import { useEffect } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { profileUpdateSchema, type profileUpdateFormData } from "@/schemas/profileUpdateSchema";
+import { updateUserDocument } from "@/firebase/firestore";
+import { updateUserPassword } from "@/firebase/auth";
 
 const ACCENT = "#ccff00";
+const inputClass = "h-11 rounded-none border-white/10 bg-white/[0.04] text-white placeholder:text-zinc-600 font-sans transition-all duration-200 focus:border-[#ccff00]/60 focus:ring-1 focus:ring-[#ccff00]/30";
+
 
 const ProfileUpdateDialog = () => {
   const user = useUserStore((state) => state.user);
+  const updateUser = useUserStore((state) => state.updateUser);
 
-  const form = useForm({
+  const {
+    reset,
+    control,
+    handleSubmit,
+    clearErrors,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm<profileUpdateFormData>({
+    resolver: zodResolver(profileUpdateSchema),
     defaultValues: {
       name: user?.name || "",
-      email: "",
+      email: user?.email || "",
       oldpassword: "",
       newpassword: "",
     },
   });
 
-  const onSubmit = () => {
+  useEffect(() => {
+    if (user) {
+      reset({
+        name: user.name,
+        email: user.email,
+        oldpassword: "",
+        newpassword: ""
+      });
+    }
+  }, [user, reset]);
+
+
+  const onSubmit = async (data: profileUpdateFormData) => {
     try {
-      console.log("Profile updated!");
-      form.reset();
-    } catch (error) {
-      console.log("Update Failed: ", error);
+      if (!user?.id) {
+        throw new Error("User not authenticated");
+      }
+
+      const updatedName = data.name.trim();
+      const nameChanged = updatedName !== user.name;
+
+      const passwordChanged =
+        data.oldpassword.length > 0 ||
+        data.newpassword.length > 0;
+
+      // Nothing to update
+      if (!nameChanged && !passwordChanged) {
+        console.log("No changes detected");
+        return;
+      }
+
+      // 1. Update password if requested
+      if (passwordChanged) {
+        await updateUserPassword(
+          data.oldpassword,
+          data.newpassword
+        );
+      }
+
+      // 2. Update name if requested
+      if (nameChanged) {
+        await updateUserDocument(user.id, {
+          name: updatedName,
+        });
+
+        updateUser({
+          name: updatedName,
+        });
+      }
+
+      // 3. Update form defaults
+      reset({
+        name: updatedName,
+        email: user.email,
+        oldpassword: "",
+        newpassword: "",
+      });
+
+      console.log("Profile updated!", data);
+    } catch (error: unknown) {
+      const firebaseError = error as { code?: string };
+
+      if (firebaseError.code === "auth/invalid-credential") {
+        setError("oldpassword", {
+          type: "manual",
+          message: "Incorrect password. Please try again.",
+        });
+      } else {
+        console.error("Profile update failed:", error);
+      }
     }
   };
 
-  const inputClass =
-    "h-11 rounded-none border-white/10 bg-white/[0.04] text-white placeholder:text-zinc-600 font-sans transition-all duration-200 focus:border-[#ccff00]/60 focus:ring-1 focus:ring-[#ccff00]/30";
+
 
   return (
     <div className="w-full">
@@ -63,8 +142,8 @@ const ProfileUpdateDialog = () => {
                 duration-200
                 hover:bg-[#d6ff33]
                 hover:shadow-[4px_4px_0_rgba(204,255,0,0.15)]
-                active:translate-x-[2px]
-                active:translate-y-[2px]
+                active:translate-x-0.5
+                active:translate-y-0.5
                 active:shadow-none
               "
             >
@@ -105,7 +184,7 @@ const ProfileUpdateDialog = () => {
                     justify-center
                     border
                     border-[#ccff00]/30
-                    bg-[#ccff00]/[0.06]
+                    bg-[#ccff00]/6
                   "
                   style={{
                     clipPath:
@@ -139,11 +218,11 @@ const ProfileUpdateDialog = () => {
               </p>
             </DialogHeader>
 
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               {/* Name */}
               <Controller
                 name="name"
-                control={form.control}
+                control={control}
                 render={({ field }) => (
                   <Field>
                     <FieldLabel
@@ -163,10 +242,14 @@ const ProfileUpdateDialog = () => {
                       <UserRound className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-600" />
 
                       <Input
+                        //onChange update the name in firebase
                         {...field}
-                        placeholder={user?.name}
+                        placeholder="Enter your name"
                         className={`${inputClass} pl-10`}
+                        aria-label={user?.name ?? "username"}
+                        aria-invalid={errors.name ? "true" : "false"}
                       />
+                      {errors.name && <p role="alert">{errors.name.message}</p>}
                     </div>
                   </Field>
                 )}
@@ -175,7 +258,7 @@ const ProfileUpdateDialog = () => {
               {/* Email */}
               <Controller
                 name="email"
-                control={form.control}
+                control={control}
                 render={({ field }) => (
                   <Field>
                     <div className="flex items-center justify-between">
@@ -206,7 +289,10 @@ const ProfileUpdateDialog = () => {
                         disabled
                         placeholder={user?.email}
                         className={`${inputClass} cursor-not-allowed pl-10 opacity-50`}
+                        aria-label={user?.email ?? "useremail"}
+                        aria-invalid={errors.email ? "true" : "false"}
                       />
+                      {errors.email && <p role="alert">{errors.email.message}</p>}
                     </div>
                   </Field>
                 )}
@@ -238,7 +324,7 @@ const ProfileUpdateDialog = () => {
               {/* Old password */}
               <Controller
                 name="oldpassword"
-                control={form.control}
+                control={control}
                 render={({ field }) => (
                   <Field>
                     <FieldLabel
@@ -255,11 +341,21 @@ const ProfileUpdateDialog = () => {
                     </FieldLabel>
 
                     <Input
+                      //onChange function needed with state verify with user?.password
                       {...field}
                       type="password"
                       placeholder="Enter current password"
                       className={inputClass}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        clearErrors("oldpassword");
+                      }}
                     />
+                    {errors.oldpassword && (
+                      <p className="mt-1 text-xs text-red-500">
+                        {errors.oldpassword.message}
+                      </p>
+                    )}
                   </Field>
                 )}
               />
@@ -267,7 +363,7 @@ const ProfileUpdateDialog = () => {
               {/* New password */}
               <Controller
                 name="newpassword"
-                control={form.control}
+                control={control}
                 render={({ field }) => (
                   <Field>
                     <FieldLabel
@@ -284,11 +380,17 @@ const ProfileUpdateDialog = () => {
                     </FieldLabel>
 
                     <Input
+                      //onChange function needed with state
                       {...field}
                       type="password"
                       placeholder="Enter new password"
                       className={inputClass}
                     />
+                    {errors.newpassword && (
+                      <p className="mt-1 text-xs text-red-500">
+                        {errors.newpassword.message}
+                      </p>
+                    )}
                   </Field>
                 )}
               />
@@ -304,7 +406,7 @@ const ProfileUpdateDialog = () => {
                         rounded-none
                         border
                         border-white/10
-                        bg-white/[0.03]
+                        bg-white/3
                         px-6
                         text-xs
                         font-black
@@ -313,7 +415,7 @@ const ProfileUpdateDialog = () => {
                         text-zinc-400
                         transition-all
                         hover:border-white/20
-                        hover:bg-white/[0.06]
+                        hover:bg-white/6
                         hover:text-white
                       "
                     >
@@ -324,6 +426,7 @@ const ProfileUpdateDialog = () => {
 
                 <Button
                   type="submit"
+                  disabled={isSubmitting}
                   className="
                     h-11
                     rounded-none
@@ -344,7 +447,7 @@ const ProfileUpdateDialog = () => {
                     active:shadow-none
                   "
                 >
-                  Save Changes
+                  {isSubmitting ? "Saving..." : "Save Changes"}
                 </Button>
               </DialogFooter>
             </form>

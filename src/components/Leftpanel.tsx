@@ -51,32 +51,10 @@ const Leftpanel = () => {
                 gap-3
               "
             >
-              <div
-                className="
-                  flex
-                  h-10
-                  w-10
-                  shrink-0
-                  items-center
-                  justify-center
-                  overflow-hidden
-                  border
-                  border-border
-                  bg-background
-                  transition-colors
-                  duration-200
-                  group-hover:border-primary/50
-                "
-                style={{
-                  clipPath:
-                    "polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px)",
-                }}
-              >
-                <img
-                  src="/Logo.png"
-                  alt="PennyPilot"
-                  className="h-full w-full object-cover"
-                />
+              <div>
+                <span className=" relative flex h-9 w-9 items-center justify-center border-2 border-border bg-primary text-primary-foreground shadow-[3px_3px_0_var(--shadow-color)] transition-transform group-hover:-translate-x-0.5 group-hover:-translate-y-0.5" >
+                  <img src="/Logo.png" alt="logo" />
+                </span>
               </div>
 
               <div className="min-w-0">

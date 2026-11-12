@@ -1,4 +1,4 @@
-import { TrendingUp } from "lucide-react"
+import { TrendingDown, TrendingUp } from "lucide-react"
 import { LabelList, RadialBar, RadialBarChart } from "recharts"
 
 import {
@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/chart"
 
 import { useTransactionStore } from "@/store/transactionStore"
-import { getExpenseByCategory } from "@/utils/transaction.utils"
+import { getExpenseByCategory, getTransactionsByMonth, getTotalByType, getPercentage, } from "@/utils/transaction.utils"
 
 export const description = "A radial chart with a label"
 
@@ -39,9 +39,22 @@ const chartConfig = {
 export function ChartRadialLabel() {
   const transactions = useTransactionStore(
     (state) => state.transactions
-  )
+  );
 
-  const expenseByCategory = getExpenseByCategory(transactions)
+  const currentMonth = new Date().getMonth()+1;
+  const currentYear = new Date().getFullYear();
+
+  const currentMonthexpense = getTransactionsByMonth(transactions, currentMonth, currentYear);
+  const expenseByCategory = getExpenseByCategory(currentMonthexpense);
+
+
+  //Expense
+    const previousExpense = getTransactionsByMonth(transactions, currentMonth-1, currentYear);
+    const latestExpense = getTransactionsByMonth(transactions, currentMonth, currentYear);
+    const previousNetExpense = getTotalByType(previousExpense, "Expense");
+    const latestNetExpense = getTotalByType(latestExpense, "Expense");
+    const monthlyExpenseChange = latestNetExpense - previousNetExpense;
+    const monthlyExpenseChangePercentage = getPercentage(previousNetExpense, latestNetExpense);
 
   const chartData = Object.entries(expenseByCategory).map(
     ([category, amount], index) => ({
@@ -65,8 +78,8 @@ export function ChartRadialLabel() {
       <CardHeader
         className="
           border-b-2
-          border-[var(--border)]
-          bg-[var(--card)]
+          border-border
+          bg-card
           px-5 py-5
           text-left
         "
@@ -77,7 +90,7 @@ export function ChartRadialLabel() {
             font-black
             uppercase
             tracking-tight
-            text-[var(--foreground)]
+            text-foreground
           "
         >
           Expense Breakdown
@@ -87,7 +100,7 @@ export function ChartRadialLabel() {
           className="
             text-sm
             font-medium
-            text-[var(--muted-foreground)]
+            text-muted-foreground
           "
         >
           August 2024
@@ -99,7 +112,7 @@ export function ChartRadialLabel() {
           flex flex-1
           items-center
           justify-center
-          bg-[var(--card)]
+          bg-card
           px-4
           pb-4
           pt-6
@@ -111,7 +124,7 @@ export function ChartRadialLabel() {
             mx-auto
             aspect-square
             w-full
-            max-h-[280px]
+            max-h-70
           "
         >
           <RadialBarChart
@@ -131,9 +144,9 @@ export function ChartRadialLabel() {
                   className="
                     rounded-none
                     border-2
-                    border-[var(--border)]
-                    bg-[var(--card)]
-                    text-[var(--foreground)]
+                    border-border
+                    bg-card
+                    text-foreground
                     shadow-[4px_4px_0_var(--shadow-color)]
                   "
                 />
@@ -153,7 +166,7 @@ export function ChartRadialLabel() {
                 position="insideStart"
                 dataKey="category"
                 className="
-                  fill-[var(--primary-foreground)]
+                  fill-primary-foreground
                   capitalize
                   font-bold
                 "
@@ -170,8 +183,8 @@ export function ChartRadialLabel() {
           items-start
           gap-3
           border-t-2
-          border-[var(--border)]
-          bg-[var(--muted)]
+          border-border
+          bg-muted
           px-5 py-4
           text-sm
           rounded-none
@@ -183,7 +196,7 @@ export function ChartRadialLabel() {
             items-center
             gap-2
             font-black
-            text-[var(--foreground)]
+            text-foreground
           "
         >
           <span
@@ -193,15 +206,16 @@ export function ChartRadialLabel() {
               justify-center
               border-2
               border-border
-              bg-primary
               p-1
               shadow-[2px_2px_0_var(--shadow-color)]
             "
           >
-            <TrendingUp className="h-4 w-4" />
+            {
+              monthlyExpenseChange > 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />
+            }
           </span>
 
-          <span>Trending up by 5.2% this month</span>
+          <span>Trending {monthlyExpenseChange > 0 ? "up" :"down"} by {(monthlyExpenseChangePercentage)}% this month</span>
         </div>
 
         <div
@@ -210,7 +224,7 @@ export function ChartRadialLabel() {
             font-medium
             uppercase
             tracking-wide
-            text-[var(--muted-foreground)]
+            text-muted-foreground
           "
         >
           Showing total expenses for this month

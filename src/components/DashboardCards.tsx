@@ -79,7 +79,7 @@ const DashboardCards = ({
                 <BanknoteArrowDown size={18} strokeWidth={1.8} />
               </div>
 
-              <span className="truncate text-sm font-black uppercase tracking-wider text-foreground sm:text-base">
+              <span className="truncate text-sm font-black uppercase tracking-wider text-foreground sm:text-base ">
                 {title}
               </span>
             </div>
@@ -146,7 +146,9 @@ const DashboardCards = ({
             )}
 
             <span>
-              ₹{(percentage)}%
+              {
+                percentage == "0.00" ? "new" : `₹${percentage}%`
+              }
             </span>
           </span>
         </CardContent>

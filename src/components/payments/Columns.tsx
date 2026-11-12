@@ -9,7 +9,7 @@ export type Payment = {
   category: string;
   method: string;
   date: Date;
-  amount: string;
+  amount: number;
 };
 
 export type FirestorePayment = Omit<Payment, "date"> & {
@@ -17,7 +17,7 @@ export type FirestorePayment = Omit<Payment, "date"> & {
 };
 
 const sortButtonClass =
-  "h-9 rounded-none px-2 text-xs font-bold uppercase tracking-wide text-[var(--muted-foreground)] transition-colors hover:bg-[var(--accent)] hover:text-[var(--accent-foreground)]";
+  "h-9 rounded-none px-2 text-xs font-bold uppercase tracking-wide text-muted-foreground transition-colors hover:bg-[var(--accent)] hover:text-[var(--accent-foreground)]";
 
 const SortIcon = () => (
   <ArrowUpDown
@@ -44,7 +44,7 @@ export const columns: ColumnDef<Payment>[] = [
       );
     },
     cell: ({ row }) => (
-      <span className="font-semibold text-[var(--foreground)]">
+      <span className="font-semibold text-foreground">
         {row.original.name}
       </span>
     ),
@@ -93,12 +93,12 @@ export const columns: ColumnDef<Payment>[] = [
   {
     accessorKey: "category",
     header: (
-      <span className="text-xs font-bold uppercase tracking-wide text-[var(--muted-foreground)]">
+      <span className="text-xs font-bold uppercase tracking-wide text-foreground">
         Category
       </span>
     ),
     cell: ({ row }) => (
-      <span className="text-sm text-[var(--foreground)]">
+      <span className="text-sm text-foreground">
         {row.original.category}
       </span>
     ),
@@ -121,7 +121,7 @@ export const columns: ColumnDef<Payment>[] = [
       );
     },
     cell: ({ row }) => (
-      <span className="text-sm text-[var(--muted-foreground)]">
+      <span className="text-sm text-muted-foreground">
         {row.original.method}
       </span>
     ),
@@ -144,7 +144,7 @@ export const columns: ColumnDef<Payment>[] = [
       );
     },
     cell: ({ row }) => (
-      <span className="text-sm text-[var(--muted-foreground)]">
+      <span className="text-sm text-muted-foreground">
         {row.original.date.toLocaleDateString()}
       </span>
     ),
@@ -191,7 +191,7 @@ export const columns: ColumnDef<Payment>[] = [
   {
     id: "actions",
     header: (
-      <span className="text-xs font-bold uppercase tracking-wide text-[var(--muted-foreground)]">
+      <span className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
         Actions
       </span>
     ),
@@ -202,7 +202,7 @@ export const columns: ColumnDef<Payment>[] = [
         <Button
           variant="ghost"
           size="sm"
-          className="h-8 w-8 rounded-none border-2 border-transparent p-0 text-[var(--muted-foreground)] transition-all duration-150 hover:border-[var(--destructive)] hover:bg-[var(--destructive)] hover:text-[var(--destructive-foreground)]"
+          className="h-8 w-8 rounded-none border-2 border-transparent p-0 text-muted-foreground transition-all duration-150 hover:border-destructive hover:bg-destructive hover:text-destructive-foreground"
           onClick={() => {
             console.log("Deleted payment:", payment);
           }}

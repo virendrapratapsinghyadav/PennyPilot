@@ -46,8 +46,8 @@ export const getPercentage = (previousMonth: number, currentMonth: number) => {
     return "0.00";
   }
   const monthlyChangePercentage =
-    ((currentMonth - previousMonth) / Math.abs(previousMonth)) * 100;
-  return monthlyChangePercentage.toFixed(2);
+    Math.abs(((currentMonth - previousMonth) / Math.abs(previousMonth))) * 100;
+  return (monthlyChangePercentage.toFixed(2));
 };
 
 //Expense By Categories

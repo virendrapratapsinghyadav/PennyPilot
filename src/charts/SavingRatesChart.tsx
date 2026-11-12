@@ -233,7 +233,7 @@ export function SavingRatesChart() {
             Track your monthly savings and saving rate
           </span>
 
-          <span className="flex h-6 w-6 shrink-0 items-center justify-center border-2 border-border bg-primary shadow-[2px_2px_0_var(--shadow-color)]">
+          <span className="flex h-6 w-6 shrink-0 items-center justify-center border-2 border-border shadow-[2px_2px_0_var(--shadow-color)]">
             <TrendingUp className="h-3.5 w-3.5" />
           </span>
         </div>

@@ -117,7 +117,9 @@ type Period = "week" | "month" | "quater" | "year"
 export function MainChart() {
   const transactions = useTransactionStore(
     (state) => state.transactions
-  )
+  );
+
+  
 
   const [period, setPeriod] = useState<Period>("month")
 
@@ -151,8 +153,8 @@ export function MainChart() {
           flex flex-col
           gap-4
           border-b-2
-          border-[var(--border)]
-          bg-[var(--card)]
+          border-border
+          bg-card
           px-5
           py-5
           sm:flex-row
@@ -166,7 +168,7 @@ export function MainChart() {
               font-black
               uppercase
               tracking-tight
-              text-[var(--foreground)]
+              text-foreground
             "
           >
             Financial Overview
@@ -176,7 +178,7 @@ export function MainChart() {
             className="
               text-sm
               font-medium
-              text-[var(--muted-foreground)]
+              text-muted-foreground
             "
           >
             Income, expenses and savings over time
@@ -196,13 +198,13 @@ export function MainChart() {
               w-full
               rounded-none
               border-2
-              border-[var(--border)]
-              bg-[var(--card)]
+              border-border
+              bg-card
               font-bold
-              text-[var(--foreground)]
+              text-foreground
               shadow-[4px_4px_0_var(--shadow-color)]
               sm:ml-auto
-              sm:w-[170px]
+              sm:w-42.5
             "
           >
             <SelectValue placeholder="Select period" />
@@ -212,9 +214,9 @@ export function MainChart() {
             className="
               rounded-none
               border-2
-              border-[var(--border)]
-              bg-[var(--card)]
-              text-[var(--foreground)]
+              border-border
+              bg-card
+              text-foreground
               shadow-[4px_4px_0_var(--shadow-color)]
             "
           >
@@ -223,8 +225,8 @@ export function MainChart() {
               className="
                 rounded-none
                 font-bold
-                focus:bg-[var(--primary)]
-                focus:text-[var(--primary-foreground)]
+                focus:bg-primary
+                focus:text-primary-foreground
               "
             >
               Last 12 months
@@ -235,8 +237,8 @@ export function MainChart() {
               className="
                 rounded-none
                 font-bold
-                focus:bg-[var(--primary)]
-                focus:text-[var(--primary-foreground)]
+                focus:bg-primary
+                focus:text-primary-foreground
               "
             >
               Last 3 months
@@ -247,8 +249,8 @@ export function MainChart() {
               className="
                 rounded-none
                 font-bold
-                focus:bg-[var(--primary)]
-                focus:text-[var(--primary-foreground)]
+                focus:bg-primary
+                focus:text-primary-foreground
               "
             >
               Last 30 days
@@ -259,8 +261,8 @@ export function MainChart() {
               className="
                 rounded-none
                 font-bold
-                focus:bg-[var(--primary)]
-                focus:text-[var(--primary-foreground)]
+                focus:bg-primary
+                focus:text-primary-foreground
               "
             >
               Last 7 days
@@ -271,7 +273,7 @@ export function MainChart() {
 
       <CardContent
         className="
-          bg-[var(--card)]
+          bg-card
           px-3
           pb-5
           pt-5
@@ -284,10 +286,10 @@ export function MainChart() {
           config={chartConfig}
           className="
             aspect-auto
-            h-[280px]
+            h-70
             w-full
-            sm:h-[320px]
-            md:h-[360px]
+            sm:h-80
+            md:h-90
           "
         >
           <AreaChart
@@ -401,12 +403,12 @@ export function MainChart() {
               content={
                 <ChartTooltipContent
                   className="
-                    w-[180px]
+                    w-45
                     rounded-none
                     border-2
-                    border-[var(--border)]
-                    bg-[var(--card)]
-                    text-[var(--foreground)]
+                    border-border
+                    bg-card
+                    text-foreground
                     shadow-[4px_4px_0_var(--shadow-color)]
                   "
                   labelFormatter={(value) => {
@@ -474,7 +476,7 @@ export function MainChart() {
                     font-bold
                     uppercase
                     tracking-wide
-                    text-[var(--foreground)]
+                    text-foreground
                   "
                 />
               }

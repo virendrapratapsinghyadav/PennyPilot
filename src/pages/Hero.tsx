@@ -32,7 +32,7 @@ const Hero = () => {
   const latestExpense = getTransactionsByMonth(transaction, currentMonth, currentYear);
   const previousNetExpense = getTotalByType(previousExpense, "Expense");
   const latestNetExpense = getTotalByType(latestExpense, "Expense");
-  const monthlyExpenseChange = latestNetIncome - previousNetExpense;
+  const monthlyExpenseChange = latestNetExpense - previousNetExpense;
   const monthlyExpenseChangePercentage = getPercentage(previousNetExpense, latestNetExpense)
 
   //Saving

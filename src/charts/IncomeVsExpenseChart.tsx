@@ -1,4 +1,3 @@
-import { TrendingUp } from "lucide-react"
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
 
 import {
@@ -19,8 +18,7 @@ import {
 
 import { useTransactionStore } from "@/store/transactionStore"
 import {
-  calculateMonthly,
-  getPercentage,
+  calculateMonthly
 } from "@/utils/transaction.utils"
 
 const monthNames = [
@@ -51,7 +49,6 @@ const chartConfig = {
 
 export function IncomeVsExpenseChart() {
   const currentYear = new Date().getFullYear()
-  const currentMonth = new Date().getMonth()
 
   const transactions = useTransactionStore(
     (state) => state.transactions
@@ -67,18 +64,6 @@ export function IncomeVsExpenseChart() {
     "Expense"
   )
 
-  const currentDifference =
-    (incomeEachMonth[currentMonth] ?? 0) -
-    (expenseEachMonth[currentMonth] ?? 0)
-
-  const previousDifference =
-    (incomeEachMonth[currentMonth - 1] ?? 0) -
-    (expenseEachMonth[currentMonth - 1] ?? 0)
-
-  const percentageChange = getPercentage(
-    previousDifference,
-    currentDifference
-  )
 
   const chartData = Array.from(
     { length: 12 },
@@ -103,8 +88,8 @@ export function IncomeVsExpenseChart() {
       <CardHeader
         className="
           border-b-2
-          border-[var(--border)]
-          bg-[var(--card)]
+          border-border
+          bg-card
           px-5
           py-5
         "
@@ -115,7 +100,7 @@ export function IncomeVsExpenseChart() {
             font-black
             uppercase
             tracking-tight
-            text-[var(--foreground)]
+            text-foreground
           "
         >
           Income vs Expense
@@ -125,7 +110,7 @@ export function IncomeVsExpenseChart() {
           className="
             text-xs
             font-medium
-            text-[var(--muted-foreground)]
+            text-muted-foreground
             sm:text-sm
           "
         >
@@ -135,7 +120,7 @@ export function IncomeVsExpenseChart() {
 
       <CardContent
         className="
-          bg-[var(--card)]
+          bg-card
           px-3
           py-5
           sm:px-5
@@ -145,11 +130,11 @@ export function IncomeVsExpenseChart() {
         <ChartContainer
           config={chartConfig}
           className="
-            h-[220px]
+            h-55
             w-full
-            sm:h-[280px]
-            md:h-[320px]
-            lg:h-[350px]
+            sm:h-70
+            md:h-80
+            lg:h-87.5
           "
         >
           <BarChart
@@ -193,12 +178,12 @@ export function IncomeVsExpenseChart() {
               content={
                 <ChartTooltipContent
                   className="
-                    w-[170px]
+                    w-42.5
                     rounded-none
                     border-2
-                    border-[var(--border)]
-                    bg-[var(--card)]
-                    text-[var(--foreground)]
+                    border--border
+                    bg-card
+                    text-foreground
                     shadow-[4px_4px_0_var(--shadow-color)]
                   "
                   indicator="dashed"
@@ -232,8 +217,8 @@ export function IncomeVsExpenseChart() {
           gap-3
           border-t-2
           rounded-none
-          border-[var(--border)]
-          bg-[var(--muted)]
+          border-border
+          bg-muted
           px-5
           py-4
           text-xs
@@ -247,27 +232,9 @@ export function IncomeVsExpenseChart() {
             gap-2
             font-black
             leading-none
-            text-[var(--foreground)]
+            text-foreground
           "
         >
-          <span
-            className="
-              inline-flex
-              items-center
-              justify-center
-              border-2
-              border-[var(--border)]
-              bg-[var(--primary)]
-              p-1
-              shadow-[2px_2px_0_var(--shadow-color)]
-            "
-          >
-            <TrendingUp className="h-4 w-4" />
-          </span>
-
-          <span>
-            Trending up by {percentageChange}% this month
-          </span>
         </div>
 
         <div
@@ -276,7 +243,7 @@ export function IncomeVsExpenseChart() {
             font-medium
             uppercase
             tracking-wide
-            text-[var(--muted-foreground)]
+            text-muted-foreground
           "
         >
           Showing income and expenses for {currentYear}

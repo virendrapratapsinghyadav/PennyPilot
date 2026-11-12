@@ -77,8 +77,8 @@ export function ExpenseByCategoryChart() {
             <CardHeader
                 className="
                     border-b-2
-                    border-[var(--border)]
-                    bg-[var(--card)]
+                    border-border
+                    bg-card
                     px-5
                     py-5
                 "
@@ -89,7 +89,7 @@ export function ExpenseByCategoryChart() {
                         font-black
                         uppercase
                         tracking-tight
-                        text-[var(--foreground)]
+                        text-foreground
                     "
                 >
                     Expenses by Category
@@ -99,16 +99,16 @@ export function ExpenseByCategoryChart() {
                     className="
                         text-sm
                         font-medium
-                        text-[var(--muted-foreground)]
+                        text-muted-foreground
                     "
                 >
-                    Your spending breakdown for the selected period
+                    Your spending breakdown throughout the year
                 </CardDescription>
             </CardHeader>
 
             <CardContent
                 className="
-                    bg-[var(--card)]
+                    bg-card
                     px-3
                     py-5
                     sm:px-5
@@ -119,9 +119,9 @@ export function ExpenseByCategoryChart() {
                     config={chartConfig}
                     className="
                         aspect-auto
-                        h-[280px]
+                        h-70
                         w-full
-                        md:h-[360px]
+                        md:h-90
                     "
                 >
                     <BarChart
@@ -175,12 +175,12 @@ export function ExpenseByCategoryChart() {
                             content={
                                 <ChartTooltipContent
                                     className="
-                                        w-[170px]
+                                        w-42.5
                                         rounded-none
                                         border-2
-                                        border-[var(--border)]
-                                        bg-[var(--card)]
-                                        text-[var(--foreground)]
+                                        border-border
+                                        bg-card
+                                        text-foreground
                                         shadow-[4px_4px_0_var(--shadow-color)]
                                     "
                                     formatter={(value) =>
@@ -202,7 +202,7 @@ export function ExpenseByCategoryChart() {
                                 position="insideLeft"
                                 offset={10}
                                 className="
-                                    fill-[var(--primary-foreground)]
+                                    fill-primary-foreground
                                     font-black
                                     uppercase
                                 "
@@ -218,7 +218,7 @@ export function ExpenseByCategoryChart() {
                                 position="right"
                                 offset={10}
                                 className="
-                                    fill-[var(--foreground)]
+                                    fill-foreground
                                     font-black
                                 "
                                 fontSize={11}

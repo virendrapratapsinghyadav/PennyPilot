@@ -1,5 +1,4 @@
 import {
-  Sun,
   LayoutDashboard,
   BarChart3,
   Bot,
@@ -9,6 +8,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import { logoutUser } from "@/firebase/auth";
+import { ThemeToggle } from "./ThemeToggle";
 
 const Leftpanel = () => {
   const navigate = useNavigate();
@@ -69,32 +69,7 @@ const Leftpanel = () => {
             </Link>
 
             {/* Theme control — behavior unchanged */}
-            <button
-              type="button"
-              aria-label="Toggle theme"
-              className="
-                flex
-                h-9
-                w-9
-                shrink-0
-                items-center
-                justify-center
-                border
-                border-border
-                bg-background
-                text-muted-foreground
-                transition-all
-                duration-200
-                hover:border-primary/40
-                hover:text-primary
-              "
-              style={{
-                clipPath:
-                  "polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px)",
-              }}
-            >
-              <Sun size={17} strokeWidth={1.8} />
-            </button>
+            <ThemeToggle />
           </div>
 
           {/* System status */}

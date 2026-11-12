@@ -88,7 +88,7 @@ export default function NavBar() {
                     absolute
                     -bottom-1
                     left-0
-                    h-[2px]
+                    h-0.5
                     w-0
                     bg-primary-foreground
                     transition-all

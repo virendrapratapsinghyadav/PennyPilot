@@ -13,7 +13,7 @@ import { Field, FieldLabel } from "./ui/field";
 import { Input } from "./ui/input";
 import { useUserStore } from "@/store/store";
 import { UserRound, Mail, LockKeyhole, ShieldCheck } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { profileUpdateSchema, type profileUpdateFormData } from "@/schemas/profileUpdateSchema";
 import { updateUserDocument } from "@/firebase/firestore";
@@ -26,6 +26,7 @@ const inputClass = "h-11 rounded-none border-white/10 bg-white/[0.04] text-white
 const ProfileUpdateDialog = () => {
   const user = useUserStore((state) => state.user);
   const updateUser = useUserStore((state) => state.updateUser);
+  const[open, setOpen] = useState(false);
 
   const {
     reset,
@@ -101,7 +102,7 @@ const ProfileUpdateDialog = () => {
         oldpassword: "",
         newpassword: "",
       });
-
+      setOpen(false);
       console.log("Profile updated!", data);
     } catch (error: unknown) {
       const firebaseError = error as { code?: string };
@@ -121,7 +122,7 @@ const ProfileUpdateDialog = () => {
 
   return (
     <div className="w-full">
-      <Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger
           render={
             <Button

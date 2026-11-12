@@ -45,10 +45,13 @@ import {
 } from "firebase/firestore";
 import { useUserStore } from "@/store/store";
 import { useTransactionStore } from "@/store/transactionStore";
+import { useState } from "react";
 
 const ACCENT = "#ccff00";
 
 const TransactionDialog = () => {
+
+  const [open, setOpen] = useState(false);
   const form = useForm<Payment>();
 
   const user = useUserStore((state) => state.user);
@@ -73,7 +76,7 @@ const TransactionDialog = () => {
       );
 
       addTransaction(data);
-      form.reset();
+      setOpen(false);
     } catch (error) {
       console.error("Failed to add transaction:", error);
     }
@@ -198,7 +201,7 @@ const TransactionDialog = () => {
 
   return (
     <div>
-      <Dialog>
+      <Dialog open= {open} onOpenChange={setOpen}>
         {/* Trigger */}
         <DialogTrigger
           render={
@@ -220,8 +223,8 @@ const TransactionDialog = () => {
                 duration-200
                 hover:bg-[#d6ff33]
                 hover:shadow-[4px_4px_0_rgba(204,255,0,0.12)]
-                active:translate-x-[2px]
-                active:translate-y-[2px]
+                active:translate-x-0.5
+                active:translate-y-0.5
                 active:shadow-none
               "
             >
@@ -267,7 +270,7 @@ const TransactionDialog = () => {
                     justify-center
                     border
                     border-[#ccff00]/30
-                    bg-[#ccff00]/[0.06]
+                    bg-[#ccff00]/6
                   "
                   style={{
                     clipPath:
@@ -470,7 +473,7 @@ const TransactionDialog = () => {
                         </FieldLabel>
 
                         <Select
-                          value={field.value}
+                          value={field.value?? ""}
                           onValueChange={field.onChange}
                         >
                           <SelectTrigger className={selectClass}>
@@ -517,7 +520,7 @@ const TransactionDialog = () => {
                         </FieldLabel>
 
                         <Select
-                          value={field.value}
+                          value={field.value ?? ""}
                           onValueChange={field.onChange}
                         >
                           <SelectTrigger className={selectClass}>
@@ -566,7 +569,7 @@ const TransactionDialog = () => {
                       </FieldLabel>
 
                       <Select
-                        value={field.value}
+                        value={field.value ?? ""}
                         onValueChange={field.onChange}
                       >
                         <SelectTrigger className={selectClass}>
@@ -603,7 +606,7 @@ const TransactionDialog = () => {
             </div>
 
             {/* Footer */}
-            <DialogFooter className="border-t border-white/[0.07] bg-white/[0.015] px-7 py-5 sm:px-8">
+            <DialogFooter className="border-t border-white/[0.07] bg-white/1.5 px-7 py-5 sm:px-8">
               <DialogClose
                 render={
                   <Button
@@ -622,7 +625,7 @@ const TransactionDialog = () => {
                       text-zinc-500
                       transition-all
                       hover:border-white/20
-                      hover:bg-white/[0.04]
+                      hover:bg-white/4
                       hover:text-white
                     "
                   >
@@ -648,8 +651,8 @@ const TransactionDialog = () => {
                   transition-all
                   hover:bg-[#d6ff33]
                   hover:shadow-[4px_4px_0_rgba(204,255,0,0.15)]
-                  active:translate-x-[2px]
-                  active:translate-y-[2px]
+                  active:translate-x-0.5
+                  active:translate-y-0.5
                   active:shadow-none
                 "
               >

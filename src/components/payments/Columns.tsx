@@ -9,7 +9,7 @@ export type Payment = {
   category: string;
   method: string;
   date: Date;
-  amount: number;
+  amount: string;
 };
 
 export type FirestorePayment = Omit<Payment, "date"> & {

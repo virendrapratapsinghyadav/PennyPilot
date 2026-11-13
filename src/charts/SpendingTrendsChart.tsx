@@ -42,7 +42,7 @@ export function SpendingTrendsChart() {
     (state) => state.transactions
   )
 
-  const dailyExpenses = calculateDaily(transactions, "Expense")
+  const dailyExpenses = calculateDaily(transactions, "Expense");
 
   const chartData = Object.entries(dailyExpenses)
     .sort(([dateA], [dateB]) => dateA.localeCompare(dateB))
@@ -50,6 +50,8 @@ export function SpendingTrendsChart() {
       date,
       expense: amount,
     }))
+
+    
 
   return (
     <Card className="brutal-card w-full overflow-hidden pt-0 rounded-none">

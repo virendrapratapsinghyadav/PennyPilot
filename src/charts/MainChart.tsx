@@ -26,6 +26,7 @@ import {
 import { useTransactionStore } from "@/store/transactionStore"
 import { calculateByPeriod } from "@/utils/transaction.utils"
 import { useState } from "react"
+import type { Payment } from "@/components/payments/Columns";
 
 import {
   AreaChart,
@@ -34,68 +35,14 @@ import {
   Area,
 } from "recharts"
 
-const chartData = [
-  { date: "2026-01-01", income: 15000, expense: 250, saving: 14750 },
-  { date: "2026-01-02", income: 0, expense: 267.45, saving: -267.45 },
+type Period = "week" | "month" | "quater" | "year";
 
-  { date: "2026-02-01", income: 15000, expense: 250, saving: 14750 },
-  { date: "2026-02-02", income: 0, expense: 267.45, saving: -267.45 },
-
-  { date: "2026-04-01", income: 15000, expense: 250, saving: 14750 },
-  { date: "2026-04-02", income: 0, expense: 267.45, saving: -267.45 },
-
-  { date: "2026-05-01", income: 15000, expense: 250, saving: 14750 },
-  { date: "2026-05-02", income: 0, expense: 267.45, saving: -267.45 },
-
-  { date: "2026-06-01", income: 15000, expense: 250, saving: 14750 },
-  { date: "2026-06-02", income: 0, expense: 267.45, saving: -267.45 },
-
-  // July 2026
-  { date: "2026-07-01", income: 0, expense: 85, saving: -85 },
-  { date: "2026-07-02", income: 2000, expense: 120, saving: 1880 },
-  { date: "2026-07-03", income: 0, expense: 60, saving: -60 },
-  { date: "2026-07-04", income: 0, expense: 145, saving: -145 },
-  { date: "2026-07-05", income: 0, expense: 40, saving: -40 },
-  { date: "2026-07-06", income: 0, expense: 210, saving: -210 },
-  { date: "2026-07-07", income: 0, expense: 75, saving: -75 },
-  { date: "2026-07-08", income: 0, expense: 148, saving: -148 },
-  { date: "2026-07-09", income: 0, expense: 95, saving: -95 },
-  { date: "2026-07-10", income: 0, expense: 180, saving: -180 },
-  { date: "2026-07-11", income: 0, expense: 65, saving: -65 },
-  { date: "2026-07-12", income: 0, expense: 120, saving: -120 },
-  { date: "2026-07-13", income: 0, expense: 55, saving: -55 },
-  { date: "2026-07-14", income: 0, expense: 90, saving: -90 },
-  { date: "2026-07-15", income: 0, expense: 250, saving: -250 },
-  { date: "2026-07-16", income: 0, expense: 70, saving: -70 },
-  { date: "2026-07-17", income: 0, expense: 135, saving: -135 },
-  { date: "2026-07-18", income: 0, expense: 190, saving: -190 },
-  { date: "2026-07-19", income: 0, expense: 80, saving: -80 },
-  { date: "2026-07-20", income: 0, expense: 110, saving: -110 },
-  { date: "2026-07-21", income: 0, expense: 45, saving: -45 },
-  { date: "2026-07-22", income: 0, expense: 160, saving: -160 },
-  { date: "2026-07-23", income: 0, expense: 75, saving: -75 },
-  { date: "2026-07-24", income: 0, expense: 125, saving: -125 },
-  { date: "2026-07-25", income: 0, expense: 220, saving: -220 },
-  { date: "2026-07-26", income: 0, expense: 95, saving: -95 },
-  { date: "2026-07-27", income: 0, expense: 65, saving: -65 },
-  { date: "2026-07-28", income: 0, expense: 145, saving: -145 },
-  { date: "2026-07-29", income: 0, expense: 80, saving: -80 },
-  { date: "2026-07-30", income: 0, expense: 175, saving: -175 },
-  { date: "2026-07-31", income: 0, expense: 90, saving: -90 },
-
-  // August 2026
-  { date: "2026-08-01", income: 15000, expense: 250, saving: 14750 },
-  { date: "2026-08-02", income: 0, expense: 267.45, saving: -267.45 },
-  { date: "2026-08-03", income: 0, expense: 200, saving: -200 },
-  { date: "2026-08-04", income: 0, expense: 95, saving: -95 },
-  { date: "2026-08-05", income: 0, expense: 30, saving: -30 },
-  { date: "2026-08-06", income: 0, expense: 110, saving: -110 },
-  { date: "2026-08-07", income: 0, expense: 50, saving: -50 },
-  { date: "2026-08-08", income: 0, expense: 228, saving: -228 },
-  { date: "2026-08-09", income: 0, expense: 80, saving: -80 },
-  { date: "2026-08-10", income: 0, expense: 135, saving: -135 },
-  { date: "2026-08-11", income: 0, expense: 88, saving: -88 },
-]
+type ChartData = {
+  date: string;
+  income: number;
+  expense: number;
+  saving: number;
+};
 
 const chartConfig = {
   income: {
@@ -112,31 +59,67 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-type Period = "week" | "month" | "quater" | "year"
-
 export function MainChart() {
   const transactions = useTransactionStore(
     (state) => state.transactions
   );
 
-  
+  const [period, setPeriod] = useState<Period>("month");
 
-  const [period, setPeriod] = useState<Period>("month")
+  function getChartData(
+    transactions: Payment[],
+    period: Period
+  ): ChartData[] {
 
-  const income = calculateByPeriod(
-    transactions,
-    "Income",
-    period
-  )
+    const income = calculateByPeriod(
+      transactions,
+      "Income",
+      period
+    );
 
-  const expense = calculateByPeriod(
-    transactions,
-    "Expense",
-    period
-  )
+    const expense = calculateByPeriod(
+      transactions,
+      "Expense",
+      period
+    );
 
-  console.log(income)
-  console.log(expense)
+    const map = new Map<string, ChartData>();
+
+    const addData = (
+      data: { date: Date; amount: number }[],
+      type: "income" | "expense"
+    ) => {
+      for (const { date, amount } of data) {
+        const key = [
+          date.getFullYear(),
+          String(date.getMonth() + 1).padStart(2, "0"),
+          String(date.getDate()).padStart(2, "0")
+        ].join("-");
+
+        const item = map.get(key) ?? {
+          date: key,
+          income: 0,
+          expense: 0,
+          saving: 0
+        };
+
+        item[type] += amount;
+        item.saving = item.income - item.expense;
+
+        map.set(key, item);
+      }
+    };
+
+    addData(income, "income");
+    addData(expense, "expense");
+
+    return [...map.values()].sort((a, b) =>
+      a.date.localeCompare(b.date)
+    );
+  }
+
+  const charData = getChartData(transactions, period);
+
 
   return (
     <Card
@@ -293,7 +276,7 @@ export function MainChart() {
           "
         >
           <AreaChart
-            data={chartData}
+            data={charData}
             margin={{
               top: 10,
               right: 10,

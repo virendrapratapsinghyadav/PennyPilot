@@ -69,7 +69,7 @@ export function DataTable<TData, TValue>({
       {/* Search */}
       <div className="flex items-center py-3 sm:py-4">
         <Input
-          className="brutal-input h-10 w-full max-w-sm rounded-none px-3 text-sm placeholder:text-[var(--muted-foreground)] sm:px-4"
+          className="brutal-input h-10 w-full max-w-sm rounded-none px-3 text-sm placeholder:text-muted-foreground sm:px-4"
           placeholder="Search transactions..."
           value={globalFilter}
           onChange={(e) => setGlobalFilter(e.target.value)}
@@ -79,17 +79,17 @@ export function DataTable<TData, TValue>({
       {/* Table */}
       <div className="w-full overflow-x-auto brutal-card rounded-none shadow-none">
         <Table className="w-full">
-          <TableHeader className="bg-[var(--muted)]">
+          <TableHeader className="bg-muted">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
                 key={headerGroup.id}
-                className="border-b-2 border-[var(--border)] hover:bg-transparent"
+                className="border-b-2 border-border hover:bg-transparent"
               >
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
                       key={header.id}
-                      className="h-11 whitespace-nowrap px-3 text-xs font-bold uppercase tracking-wide text-[var(--foreground)] sm:h-12 sm:px-4 sm:text-sm"
+                      className="h-11 whitespace-nowrap px-3 text-xs font-bold uppercase tracking-wide text-foreground sm:h-12 sm:px-4 sm:text-sm"
                     >
                       {header.isPlaceholder
                         ? null
@@ -110,7 +110,7 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="border-b border-[var(--input)] transition-colors hover:bg-[var(--accent)]/20 data-[state=selected]:bg-[var(--accent)]/30"
+                  className="border-b border-input transition-colors hover:bg-(--accent)]/20 data-[state=selected]:bg-(--accent)/30"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
@@ -129,7 +129,7 @@ export function DataTable<TData, TValue>({
               <TableRow className="hover:bg-transparent">
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center text-sm text-[var(--muted-foreground)]"
+                  className="h-24 text-center text-sm text-muted-foreground"
                 >
                   No transactions found.
                 </TableCell>
@@ -144,7 +144,7 @@ export function DataTable<TData, TValue>({
         <Button
           variant="outline"
           size="sm"
-          className="brutal-button w-fit rounded-none bg-[var(--card)] text-[var(--foreground)] hover:bg-[var(--accent)]"
+          className="brutal-button w-fit rounded-none bg-card text-foreground hover:bg-accent"
           onClick={() => setSorting([])}
         >
           Reset Sort
@@ -154,7 +154,7 @@ export function DataTable<TData, TValue>({
           <Button
             variant="outline"
             size="sm"
-            className="brutal-button rounded-none bg-[var(--card)] text-[var(--foreground)] hover:bg-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-40"
+            className="brutal-button rounded-none bg-card text-foreground hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
@@ -164,7 +164,7 @@ export function DataTable<TData, TValue>({
           <Button
             variant="outline"
             size="sm"
-            className="brutal-button rounded-none bg-[var(--card)] text-[var(--foreground)] hover:bg-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-40"
+            className="brutal-button rounded-none bg-card text-foreground hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >

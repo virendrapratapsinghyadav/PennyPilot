@@ -1,3 +1,4 @@
+
 import {
   Card,
   CardContent,
@@ -14,6 +15,7 @@ import {
   ShieldCheck,
   Wallet,
 } from "lucide-react";
+import { useMemo, useState } from "react";
 
 const Help = () => {
   const helpTopics = [
@@ -60,6 +62,35 @@ const Help = () => {
     },
   ];
 
+  const [open, setOpen] = useState(null);
+  const [search, setSearch] = useState("");
+
+  const filteredTopics = useMemo(
+    () =>
+      helpTopics.filter(
+        (topic) =>
+          topic.title.toLowerCase().includes(search.toLowerCase()) ||
+          topic.description.toLowerCase().includes(search.toLowerCase())
+      ),
+    [search]
+  );
+
+  const filteredFaqs = useMemo(
+    () =>
+      faqs
+        .map((faq, index) => ({ ...faq, originalIndex: index }))
+        .filter(
+          (faq) =>
+            faq.question.toLowerCase().includes(search.toLowerCase()) ||
+            faq.answer.toLowerCase().includes(search.toLowerCase())
+        ),
+    [search]
+  );
+
+  const toggleAccordion = (index) => {
+    setOpen(open === index ? null : index);
+  };
+
   return (
     <main className="min-h-screen bg-background px-4 py-8 md:px-8 lg:px-10">
       <div className="mx-auto max-w-6xl">
@@ -89,11 +120,17 @@ const Help = () => {
             </div>
 
             {/* Search */}
-            <div className="mt-7 relative">
-              <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+            <div className="relative mt-7">
+              <Search className="absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
 
               <Input
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setOpen(null);
+                }}
                 placeholder="Search for help..."
+                aria-label="Search help topics and frequently asked questions"
                 className="brutal-input h-13 rounded-none bg-card pl-12 pr-4 text-foreground placeholder:text-muted-foreground focus:shadow-[3px_3px_0_var(--shadow-color)]"
               />
             </div>
@@ -115,13 +152,13 @@ const Help = () => {
           </div>
 
           <div className="grid gap-5 md:grid-cols-3">
-            {helpTopics.map((topic) => {
+            {filteredTopics.map((topic) => {
               const Icon = topic.icon;
 
               return (
                 <Card
                   key={topic.title}
-                  className="brutal-card brutal-hover cursor-pointer rounded-none"
+                  className="brutal-card brutal-hover rounded-none"
                 >
                   <CardHeader>
                     <div className="mb-2 flex h-11 w-11 items-center justify-center border-2 border-border bg-accent">
@@ -140,6 +177,12 @@ const Help = () => {
               );
             })}
           </div>
+
+          {filteredTopics.length === 0 && search && (
+            <p className="py-5 text-center text-sm text-muted-foreground">
+              No help topics found.
+            </p>
+          )}
         </section>
 
         {/* FAQ */}
@@ -161,24 +204,42 @@ const Help = () => {
             </CardHeader>
 
             <CardContent className="p-0">
-              {faqs.map((faq, index) => (
+              {filteredFaqs.map((faq, index) => (
                 <div
-                  key={faq.question}
-                  className={`p-5 ${
-                    index !== faqs.length - 1
-                      ? "border-b-2 border-border"
-                      : ""
-                  }`}
+                  key={faq.originalIndex}
+                  className={`p-5 ${index !== filteredFaqs.length - 1
+                    ? "border-b-2 border-border"
+                    : ""
+                    }`}
                 >
-                  <h3 className="font-black text-foreground">
-                    {faq.question}
-                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => toggleAccordion(faq.originalIndex)}
+                    aria-expanded={open === faq.originalIndex}
+                    className="flex w-full items-center justify-between gap-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    <span className="font-black text-foreground">
+                      {faq.question}
+                    </span>
 
-                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                    {faq.answer}
-                  </p>
+                    <span className="shrink-0 text-xl font-bold">
+                      {open === faq.originalIndex ? "−" : "+"}
+                    </span>
+                  </button>
+
+                  {open === faq.originalIndex && (
+                    <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                      {faq.answer}
+                    </p>
+                  )}
                 </div>
               ))}
+
+              {filteredFaqs.length === 0 && (
+                <p className="p-6 text-center text-sm text-muted-foreground">
+                  No questions found. Try searching with different keywords.
+                </p>
+              )}
             </CardContent>
           </Card>
 
@@ -205,7 +266,11 @@ const Help = () => {
                   type="button"
                   className="brutal-button w-full rounded-none bg-primary px-4 py-3 text-sm font-black uppercase tracking-wide text-primary-foreground"
                 >
-                  Contact support
+                  <a
+                    href="mailto:support@pennypilot.com?subject=PennyPilot%20Support%20Request"
+                  >
+                    Contact support
+                  </a>
                 </button>
               </CardContent>
             </Card>

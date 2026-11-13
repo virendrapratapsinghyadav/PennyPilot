@@ -1,5 +1,3 @@
-import { Input } from "@/components/ui/input"
-import { Search } from "lucide-react"
 import { Link } from "react-router-dom"
 import TransactionDialog from "@/components/TransactionDialog"
 import DashboardCards from "@/components/DashboardCards"
@@ -47,19 +45,7 @@ const Hero = () => {
       {/* Top Section */}
       <div className="flex flex-col gap-4 border-b-2 border-border pb-5 md:flex-row md:items-center md:justify-between">
 
-        {/* Search */}
-        <div className="relative w-full md:max-w-md">
-          <Search
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-            size={18}
-          />
-
-          <Input
-            type="text"
-            className="brutal-input h-11 pl-10"
-            placeholder="Search anything"
-          />
-        </div>
+        
 
         {/* Profile */}
         <Link to="profile" className="w-fit">

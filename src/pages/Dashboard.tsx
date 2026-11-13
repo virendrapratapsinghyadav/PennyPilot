@@ -1,28 +1,29 @@
-import Leftpanel from "@/components/Leftpanel"
-import { useState } from "react"
-import { Outlet } from "react-router-dom"
-import { Hamburger } from "lucide-react"
+
+import {
+  SidebarProvider,
+  SidebarTrigger,
+  SidebarInset,
+} from "@/components/ui/sidebar";
+
+import { AppSidebar } from "@/components/App-sidebar";
+import { Outlet } from "react-router-dom";
 
 const Dashboard = () => {
-  const [present, setPresent] = useState<boolean>(true);
-
   return (
-    <div className="h-screen p-5 ">
-      <div className=" flex h-full border overflow-hidden">
-      <aside className="w-64 p-2 border-r">
-        {
-          present? (<Leftpanel />) : (<Hamburger />)
-        }
-      </aside>
+    <SidebarProvider>
+      <AppSidebar />
 
-      <main className="flex-1 p-5 overflow-y-scroll">
-        <Outlet />
-      </main>
-    </div>
-    <div>
-    </div>
-    </div>
-  )
-}
+      <SidebarInset>
+        <header className="flex h-14 items-center border-b px-4">
+          <SidebarTrigger />
+        </header>
 
-export default Dashboard
+        <main className="flex-1 overflow-y-auto p-5">
+          <Outlet />
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
+  );
+};
+
+export default Dashboard;

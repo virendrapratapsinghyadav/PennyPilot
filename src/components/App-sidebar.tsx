@@ -21,7 +21,7 @@ import {
 
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
-import { logoutUser } from "@/firebase/auth";
+import { logoutUser } from "@/firebase/auth.service";
 import { ThemeToggle } from "./ThemeToggle";
 
 // Navigation items

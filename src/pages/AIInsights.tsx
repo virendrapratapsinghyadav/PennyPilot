@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-import { useTransactionStore } from "@/store/transactionStore";
+import { useTransactionStore } from "@/store/transaction.store";
 import { buildMonthlyContext } from "@/ai/contexts/monthlyContext";
 import { generateSpendingInsights } from "@/ai/aiService";
 

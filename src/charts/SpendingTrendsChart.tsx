@@ -11,7 +11,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart"
-import { useTransactionStore } from "@/store/transactionStore"
+import { useTransactionStore } from "@/store/transaction.store"
 import { calculateDaily } from "@/utils/transaction.utils"
 import { AreaChart, CartesianGrid, XAxis, Area } from "recharts"
 

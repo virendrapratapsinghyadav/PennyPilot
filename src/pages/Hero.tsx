@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom"
 import TransactionDialog from "@/components/TransactionDialog"
 import DashboardCards from "@/components/DashboardCards"
-import { useUserStore } from "@/store/store";
+import { useUserStore } from "@/store/user.store";
 import DemoPage from "@/components/payments/Page"
 import { getPercentage, getTotalByType, getTransactionsByMonth } from "@/utils/transaction.utils"
-import { useTransactionStore } from "@/store/transactionStore"
+import { useTransactionStore } from "@/store/transaction.store"
 import { ChartRadialStacked } from "@/charts/ChartRadialStacked"
 import { ExpenseByCategoryChart } from "@/charts/ExpenseByCategoryChart"
 

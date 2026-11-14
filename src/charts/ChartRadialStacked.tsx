@@ -16,7 +16,7 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart"
 
-import { useTransactionStore } from "@/store/transactionStore"
+import { useTransactionStore } from "@/store/transaction.store"
 import { getTotalByMethod } from "@/utils/transaction.utils"
 
 const chartConfig = {
@@ -84,8 +84,8 @@ export function ChartRadialStacked() {
       <CardHeader
         className="
           border-b-2
-          border-[var(--border)]
-          bg-[var(--card)]
+          border-border
+          bg-card
           px-5 py-5
           text-left
         "
@@ -96,7 +96,7 @@ export function ChartRadialStacked() {
             font-black
             uppercase
             tracking-tight
-            text-[var(--foreground)]
+            text-foreground
           "
         >
           Transactions by Payment Method
@@ -106,7 +106,7 @@ export function ChartRadialStacked() {
           className="
             text-sm
             font-medium
-            text-[var(--muted-foreground)]
+            text-muted-foreground
           "
         >
           {currentMonth} {currentYear}
@@ -118,7 +118,7 @@ export function ChartRadialStacked() {
           flex flex-1
           items-center
           justify-center
-          bg-[var(--card)]
+          bg-card
           px-4
           pb-4
           pt-6
@@ -130,8 +130,8 @@ export function ChartRadialStacked() {
             mx-auto
             aspect-square
             w-full
-            max-h-[280px]
-            [&_.recharts-text]:fill-[var(--foreground)]
+            max-h-70
+            [&_.recharts-text]:fill-foreground
           "
         >
           <PieChart>
@@ -144,9 +144,9 @@ export function ChartRadialStacked() {
                   className="
                     rounded-none
                     border-2
-                    border-[var(--border)]
-                    bg-[var(--card)]
-                    text-[var(--foreground)]
+                    border-border
+                    bg-card
+                    text--foreground
                     shadow-[4px_4px_0_var(--shadow-color)]
                   "
                   formatter={(value, name) => (
@@ -161,7 +161,7 @@ export function ChartRadialStacked() {
                       <span
                         className="
                           font-medium
-                          text-[var(--muted-foreground)]
+                          text-muted-foreground
                         "
                       >
                         {chartConfig[
@@ -174,7 +174,7 @@ export function ChartRadialStacked() {
                           font-mono
                           font-black
                           tabular-nums
-                          text-[var(--foreground)]
+                          text-foreground
                         "
                       >
                         ₹{Number(value).toLocaleString("en-IN")}
@@ -198,7 +198,7 @@ export function ChartRadialStacked() {
               <LabelList
                 dataKey="type"
                 className="
-                  fill-[var(--primary-foreground)]
+                  fill-primary-foreground
                   font-black
                   uppercase
                 "
@@ -245,7 +245,7 @@ export function ChartRadialStacked() {
             font-medium
             uppercase
             tracking-wide
-            text-[var(--muted-foreground)]
+            text-muted-foreground
           "
         >
           Total transaction amount for {currentMonth}

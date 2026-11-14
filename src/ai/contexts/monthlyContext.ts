@@ -1,9 +1,9 @@
-import type { Payment } from "@/components/payments/Columns";
+import type { Payment } from "@/types/transaction.types";
 import type {
   CategorySpending,
   MonthlyFinancialContext,
   MonthlyFinancialTotals,
-} from "../types";
+} from "../../types/utilscontext.types";
 
 const sumType = (transactions: Payment[], type: string): number =>
   transactions

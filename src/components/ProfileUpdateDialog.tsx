@@ -11,13 +11,13 @@ import {
 } from "./ui/dialog";
 import { Field, FieldLabel } from "./ui/field";
 import { Input } from "./ui/input";
-import { useUserStore } from "@/store/store";
+import { useUserStore } from "@/store/user.store";
 import { UserRound, Mail, LockKeyhole, ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { profileUpdateSchema, type profileUpdateFormData } from "@/schemas/profileUpdateSchema";
-import { updateUserDocument } from "@/firebase/firestore";
-import { updateUserPassword } from "@/firebase/auth";
+import { updateUserDocument } from "@/firebase/user.service";
+import { updateUserPassword } from "@/firebase/auth.service";
 
 const ACCENT = "#ccff00";
 const inputClass = "h-11 rounded-none border-white/10 bg-white/[0.04] text-white placeholder:text-zinc-600 font-sans transition-all duration-200 focus:border-[#ccff00]/60 focus:ring-1 focus:ring-[#ccff00]/30";
@@ -55,6 +55,7 @@ const ProfileUpdateDialog = () => {
       });
     }
   }, [user, reset]);
+  
 
 
   const onSubmit = async (data: profileUpdateFormData) => {

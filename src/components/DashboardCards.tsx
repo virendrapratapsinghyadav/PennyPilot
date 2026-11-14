@@ -147,7 +147,7 @@ const DashboardCards = ({
 
             <span>
               {
-                percentage == "0.00" ? "new" : `₹${percentage}%`
+                percentage == "0.00" ? "new" : `${percentage}%`
               }
             </span>
           </span>

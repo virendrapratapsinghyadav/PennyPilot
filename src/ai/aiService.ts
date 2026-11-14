@@ -4,9 +4,9 @@ import {
   GoogleAIBackend,
 } from "firebase/ai";
 
-import { app } from "@/firebase/config";
+import { app } from "@/firebase/config.service";
 import { buildMonthlyAnalysisPrompt } from "./prompts/monthlyAnalysis";
-import type { MonthlyFinancialContext } from "./types";
+import type { MonthlyFinancialContext } from "../types/utilscontext.types";
 
 const ai = getAI(app, {
   backend: new GoogleAIBackend(),

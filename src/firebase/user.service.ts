@@ -1,22 +1,6 @@
-import { db } from  "./config";
+import { db } from  "./config.service";
 import  { doc, serverTimestamp, setDoc, getDoc, updateDoc } from "firebase/firestore";
-
-
-type createUserDocumentProps = {
-    uid: string,
-    data: {
-        name: string,
-        email: string,
-        profileURL: string
-    }
-}
-
-type UserDocument = {
-  id: string;
-  name: string;
-  email: string;
-  profileURL: string;
-};
+import type { createUserDocumentProps, UserDocument } from "@/types/user.types";
 
 
 export const createUserDocument = async({uid, data}: createUserDocumentProps) => {
@@ -56,3 +40,4 @@ export const updateUserDocument = async (
 
   await updateDoc(userRef, user);
 };
+

@@ -1,4 +1,4 @@
-import type { Payment } from "@/components/payments/Columns";
+import type { Payment } from "@/types/transaction.types"; 
 
 //Amount Calculation Utility
 export const getTotalByType = (transactions: Payment[], type: string) => {

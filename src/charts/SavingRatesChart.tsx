@@ -26,7 +26,7 @@ import {
   calculateMonthlySavings,
   calculateSavingRate,
 } from "@/utils/transaction.utils"
-import { useTransactionStore } from "@/store/transactionStore"
+import { useTransactionStore } from "@/store/transaction.store"
 
 export const description =
   "A linear line chart showing monthly savings and saving rate"

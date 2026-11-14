@@ -22,7 +22,7 @@ import {
     type ChartConfig,
 } from "@/components/ui/chart"
 
-import { useTransactionStore } from "@/store/transactionStore"
+import { useTransactionStore } from "@/store/transaction.store"
 import { getExpenseByCategory } from "@/utils/transaction.utils"
 
 const chartConfig = {
@@ -54,7 +54,7 @@ export function ExpenseByCategoryChart() {
     const transactions = useTransactionStore(
         (state) => state.transactions
     )
-
+     
     const expensesByCategory = getExpenseByCategory(transactions)
 
     const chartData = Object.entries(expensesByCategory).map(

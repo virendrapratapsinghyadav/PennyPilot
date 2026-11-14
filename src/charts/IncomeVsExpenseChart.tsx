@@ -16,7 +16,7 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart"
 
-import { useTransactionStore } from "@/store/transactionStore"
+import { useTransactionStore } from "@/store/transaction.store"
 import {
   calculateMonthly
 } from "@/utils/transaction.utils"

@@ -23,10 +23,10 @@ import {
   SelectItem,
 } from "@/components/ui/select"
 
-import { useTransactionStore } from "@/store/transactionStore"
+import { useTransactionStore } from "@/store/transaction.store"
 import { calculateByPeriod } from "@/utils/transaction.utils"
 import { useState } from "react"
-import type { Payment } from "@/components/payments/Columns";
+import type { Payment } from "@/types/transaction.types" 
 
 import {
   AreaChart,

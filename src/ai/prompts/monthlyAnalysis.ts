@@ -1,4 +1,4 @@
-import type { MonthlyFinancialContext } from "../types";
+import type { MonthlyFinancialContext } from "../../types/utilscontext.types";
 
 export const buildMonthlyAnalysisPrompt = (
   context: MonthlyFinancialContext,

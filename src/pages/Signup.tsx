@@ -17,9 +17,9 @@ import { Input } from "@/components/ui/input";
 import { signupSchema, type SignupFormData } from "@/schemas/authSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { signupUserWithEmailAndPassword } from "@/firebase/auth";
+import { signupUserWithEmailAndPassword } from "@/firebase/auth.service";
 import { useNavigate } from "react-router-dom";
-import { useUserStore } from "@/store/store";
+import { useUserStore } from "@/store/user.store";
 
 const Signup = () => {
   const navigate = useNavigate();

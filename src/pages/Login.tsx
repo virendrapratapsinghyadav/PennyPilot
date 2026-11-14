@@ -20,9 +20,9 @@ import {
   loginSchema,
   type LoginFormData,
 } from "@/schemas/authSchema";
-import { loginUserWithEmailAndPassword } from "@/firebase/auth";
+import { loginUserWithEmailAndPassword } from "@/firebase/auth.service";
 import { useNavigate } from "react-router-dom";
-import { useUserStore } from "@/store/store";
+import { useUserStore } from "@/store/user.store";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -184,7 +184,7 @@ const Login = () => {
                 Don't have an account?{" "}
                 <button
                   type="button"
-                  onClick={() => navigate("/register")}
+                  onClick={() => navigate("/signup")}
                   className="font-black text-foreground underline decoration-2 underline-offset-4 hover:text-primary"
                 >
                   Create account

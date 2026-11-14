@@ -11,10 +11,10 @@ import Analytics from './pages/Analytics'
 import Profile from './pages/Profile'
 import { useEffect } from 'react'
 import { onAuthStateChanged } from 'firebase/auth'
-import { firebaseAuth } from './firebase/auth'
-import { useUserStore } from './store/store'
+import { firebaseAuth } from './firebase/auth.service'
+import { useUserStore } from './store/user.store'
 import { doc, getDoc } from 'firebase/firestore'
-import { db } from './firebase/config'
+import { db } from './firebase/config.service'
 
 
 const router = createBrowserRouter([

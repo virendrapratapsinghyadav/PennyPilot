@@ -1,4 +1,4 @@
-import { useThemeStore } from "@/store/themeStore";
+import { useThemeStore } from "@/store/theme.store";
 import { useEffect } from "react";
 
 type Props = {

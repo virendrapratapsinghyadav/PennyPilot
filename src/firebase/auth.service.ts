@@ -1,4 +1,4 @@
-import { app } from "./config";
+import { app } from "./config.service";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -10,7 +10,7 @@ import {
 } from "firebase/auth";
 
 import type { SignupFormData, LoginFormData } from "@/schemas/authSchema";
-import { createUserDocument, getUserDocument } from "./firestore";
+import { createUserDocument, getUserDocument } from "./user.service";
 
 export const firebaseAuth = getAuth(app);
 

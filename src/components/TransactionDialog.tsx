@@ -36,15 +36,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import type { Payment } from "./payments/Columns";
-import { db } from "../firebase/config";
-import {
-  addDoc,
-  collection,
-  serverTimestamp,
-} from "firebase/firestore";
-import { useUserStore } from "@/store/store";
-import { useTransactionStore } from "@/store/transactionStore";
+import type { Payment } from "@/types/transaction.types"; 
+import { useUserStore } from "@/store/user.store";
+import { useTransactionStore } from "@/store/transaction.store";
 import { useState } from "react";
 
 const ACCENT = "#ccff00";
@@ -67,15 +61,7 @@ const TransactionDialog = () => {
         return;
       }
 
-      await addDoc(
-        collection(db, "users", user.id, "transactions"),
-        {
-          ...data,
-          createdAt: serverTimestamp(),
-        }
-      );
-
-      addTransaction(data);
+      await addTransaction(user.id, data);
       setOpen(false);
     } catch (error) {
       console.error("Failed to add transaction:", error);

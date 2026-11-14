@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useUserStore } from "@/store/store";
+import { useUserStore } from "@/store/user.store";
 
 const Profile = () => {
   const user = useUserStore((state) => state.user);

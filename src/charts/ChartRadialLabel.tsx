@@ -17,7 +17,7 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart"
 
-import { useTransactionStore } from "@/store/transactionStore"
+import { useTransactionStore } from "@/store/transaction.store"
 import { getExpenseByCategory, getTransactionsByMonth, getTotalByType, getPercentage, } from "@/utils/transaction.utils"
 
 export const description = "A radial chart with a label"

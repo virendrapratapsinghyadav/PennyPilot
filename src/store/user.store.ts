@@ -1,18 +1,5 @@
 import { create } from "zustand";
-
-interface  UserProfileProps {
-    id: string,
-    name: string,
-    email: string,
-    profileURL: string
-}
-
-interface  UserStoreProps {
-    user: UserProfileProps | null,
-    setUser: (user: UserProfileProps | null)=> void,
-    clearUser: ()=> void;
-    updateUser: (updates: Partial<UserProfileProps>) => void;
-}
+import type { UserStoreProps } from "@/types/user.types";
 
 export const useUserStore = create<UserStoreProps>((set)=>({
     //States

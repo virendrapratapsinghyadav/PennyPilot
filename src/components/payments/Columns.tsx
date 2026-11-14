@@ -2,15 +2,42 @@ import type { ColumnDef } from "@tanstack/react-table";
 import type { Timestamp } from "firebase/firestore";
 import { Button } from "../ui/button";
 import { ArrowUpDown, Trash2 } from "lucide-react";
+import { useTransactionStore } from "@/store/transaction.store";
+import { useUserStore } from "@/store/user.store";
+import type { Payment, TransactionData } from "@/types/transaction.types";
 
-export type Payment = {
-  name: string;
-  type: string;
-  category: string;
-  method: string;
-  date: Date;
-  amount: number;
+const TransactionActions = ({
+  payment,
+}: {
+  payment: TransactionData;
+}) => {
+  const user = useUserStore((state) => state.user);
+
+  const deleteTransaction = useTransactionStore(
+    (state) => state.deleteTransaction
+  );
+
+  const handleDelete = async () => {
+    if (!user) return;
+
+    try {
+      await deleteTransaction(user.id, payment.id);
+    } catch (error) {
+      console.error("Delete failed:", error);
+    }
+  };
+
+  return (
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={handleDelete}
+    >
+      <Trash2 className="h-4 w-4" />
+    </Button>
+  );
 };
+
 
 export type FirestorePayment = Omit<Payment, "date"> & {
   date: Timestamp;
@@ -26,7 +53,7 @@ const SortIcon = () => (
   />
 );
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<TransactionData>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -92,11 +119,7 @@ export const columns: ColumnDef<Payment>[] = [
 
   {
     accessorKey: "category",
-    header: (
-      <span className="text-xs font-bold uppercase tracking-wide text-foreground">
-        Category
-      </span>
-    ),
+    header: ("Category"),
     cell: ({ row }) => (
       <span className="text-sm text-foreground">
         {row.original.category}
@@ -191,28 +214,10 @@ export const columns: ColumnDef<Payment>[] = [
   {
     id: "actions",
     header: (
-      <span className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
-        Actions
-      </span>
+        "Actions"
     ),
-    cell: ({ row }) => {
-      const payment = row.original;
-
-      return (
-        <Button
-          variant="ghost"
-          size="sm"
-          className="h-8 w-8 rounded-none border-2 border-transparent p-0 text-muted-foreground transition-all duration-150 hover:border-destructive hover:bg-destructive hover:text-destructive-foreground"
-          onClick={() => {
-            console.log("Deleted payment:", payment);
-          }}
-        >
-          <Trash2
-            className="h-4 w-4"
-            strokeWidth={2}
-          />
-        </Button>
-      );
-    },
+    cell: ({ row }) => (
+      <TransactionActions payment={row.original} />
+    ),
   },
 ];

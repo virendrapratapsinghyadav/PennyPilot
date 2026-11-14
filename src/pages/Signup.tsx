@@ -55,29 +55,39 @@ const Signup = () => {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-background px-4 py-8">
+      
       <Card className="brutal-card w-full max-w-md">
         {/* Header */}
         <CardHeader className="border-b-2 border-border px-6 pb-6 pt-8">
-          <div className="mb-5 flex items-center justify-between">
-            <div className="flex h-14 w-14 items-center justify-center border-2 border-border bg-primary shadow-[3px_3px_0_var(--shadow-color)]">
-              <span className="text-2xl font-black text-primary-foreground">
-                P
-              </span>
-            </div>
+  <button
+    type="button"
+    onClick={() => navigate("/")}
+    className="mb-5 flex items-center gap-2 text-sm font-bold text-muted-foreground transition-colors hover:text-foreground"
+  >
+    <span aria-hidden="true">←</span>
+    Back to Home
+  </button>
 
-            <div className="border-2 border-border bg-secondary px-3 py-1 text-xs font-bold uppercase tracking-wider text-secondary-foreground">
-              PennyPilot
-            </div>
-          </div>
+  <div className="mb-5 flex items-center justify-between">
+    <div className="flex h-14 w-14 items-center justify-center border-2 border-border bg-primary shadow-[3px_3px_0_var(--shadow-color)]">
+      <span className="text-2xl font-black text-primary-foreground">
+        P
+      </span>
+    </div>
 
-          <CardTitle className="text-3xl font-black tracking-tight text-foreground">
-            Create your account
-          </CardTitle>
+    <div className="border-2 border-border bg-secondary px-3 py-1 text-xs font-bold uppercase tracking-wider text-secondary-foreground">
+      PennyPilot
+    </div>
+  </div>
 
-          <CardDescription className="mt-2 text-sm leading-6 text-muted-foreground">
-            Register below to get access to your PennyPilot dashboard.
-          </CardDescription>
-        </CardHeader>
+  <CardTitle className="text-3xl font-black tracking-tight text-foreground">
+    Create your account
+  </CardTitle>
+
+  <CardDescription className="mt-2 text-sm leading-6 text-muted-foreground">
+    Register below to get access to your PennyPilot dashboard.
+  </CardDescription>
+</CardHeader>
 
         {/* Form */}
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -213,7 +223,7 @@ const Signup = () => {
           </CardContent>
 
           {/* Footer */}
-          <CardFooter className="border-t-2 border-border px-6 py-6">
+          <CardFooter className=" flex flex-col border-t-2 border-border px-6 py-6">
             <Button
               type="submit"
               disabled={form.formState.isSubmitting}
@@ -221,6 +231,19 @@ const Signup = () => {
             >
               {form.formState.isSubmitting ? "Creating account..." : "Sign up"}
             </Button>
+
+            <div className="w-full border-t-2 border-border pt-5 text-center">
+              <p className="text-sm text-muted-foreground">
+                Already have an account?{" "}
+                <button
+                  type="button"
+                  onClick={() => navigate("/login")}
+                  className="font-black text-foreground underline decoration-2 underline-offset-4 hover:text-primary"
+                >
+                  Login
+                </button>
+              </p>
+            </div>
           </CardFooter>
         </form>
       </Card>

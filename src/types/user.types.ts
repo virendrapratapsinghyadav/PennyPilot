@@ -16,8 +16,10 @@ export type UserDocument = {
 
 export interface  UserStoreProps {
     user: UserDocument | null,
-    setUser: (user: UserDocument | null)=> void,
+    loading: boolean,
+    setUser: (user: UserDocument | null)=> void;
     clearUser: ()=> void;
+    setLoading: (loading: boolean) => void;
     updateUser: (updates: Partial<UserDocument>) => void;
 }
 

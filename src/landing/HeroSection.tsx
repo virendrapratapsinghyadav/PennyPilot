@@ -157,7 +157,7 @@ export default function HeroSection() {
         {/* ───────────────── CTA ───────────────── */}
         <div className="mt-12 flex items-center">
           <Link
-            to="/dashboard"
+            to="/login"
             className="
               brutal-button
               flex

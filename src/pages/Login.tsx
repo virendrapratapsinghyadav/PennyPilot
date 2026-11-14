@@ -72,26 +72,35 @@ const Login = () => {
       <Card className="brutal-card w-full max-w-md rounded-none">
 
         {/* Header */}
-        <CardHeader className="space-y-3 border-b-2 border-border pb-6">
-          <div className="flex items-center justify-between">
-            <div className="border-2 border-border bg-primary px-3 py-1.5 text-sm font-black shadow-[3px_3px_0_var(--shadow-color)]">
-              YOUR APP
+        <CardHeader className="border-b-2 border-border px-6 pb-6 pt-8">
+          <button
+            type="button"
+            onClick={() => navigate("/")}
+            className="mb-5 flex items-center gap-2 text-sm font-bold text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <span aria-hidden="true">←</span>
+            Back to Home
+          </button>
+
+          <div className="mb-5 flex items-center justify-between">
+            <div className="flex h-14 w-14 items-center justify-center border-2 border-border bg-primary shadow-[3px_3px_0_var(--shadow-color)]">
+              <span className="text-2xl font-black text-primary-foreground">
+                P
+              </span>
             </div>
 
-            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-              Account
-            </span>
+            <div className="border-2 border-border bg-secondary px-3 py-1 text-xs font-bold uppercase tracking-wider text-secondary-foreground">
+              PennyPilot
+            </div>
           </div>
 
-          <div>
-            <CardTitle className="text-3xl font-black tracking-tight">
-              Welcome back.
-            </CardTitle>
+          <CardTitle className="text-3xl font-black tracking-tight text-foreground">
+            Create your account
+          </CardTitle>
 
-            <CardDescription className="mt-2 text-muted-foreground">
-              Enter your credentials to continue.
-            </CardDescription>
-          </div>
+          <CardDescription className="mt-2 text-sm leading-6 text-muted-foreground">
+            Register below to get access to your PennyPilot dashboard.
+          </CardDescription>
         </CardHeader>
 
         <form onSubmit={form.handleSubmit(onSubmit)}>

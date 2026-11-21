@@ -62,7 +62,7 @@ const Help = () => {
     },
   ];
 
-  const [open, setOpen] = useState(null);
+  const [open, setOpen] = useState<Number | null>(null);
   const [search, setSearch] = useState("");
 
   const filteredTopics = useMemo(
@@ -87,7 +87,7 @@ const Help = () => {
     [search]
   );
 
-  const toggleAccordion = (index) => {
+  const toggleAccordion = (index: number) => {
     setOpen(open === index ? null : index);
   };
 

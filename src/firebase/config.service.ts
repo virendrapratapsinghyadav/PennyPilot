@@ -1,10 +1,9 @@
+
 import { initializeApp } from "firebase/app";
-import {
-  getFirestore,
-} from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 import {
   initializeAppCheck,
-  ReCaptchaV3Provider,
+  ReCaptchaEnterpriseProvider,
 } from "firebase/app-check";
 
 const firebaseConfig = {
@@ -18,17 +17,16 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 
-// Configure App Check before making Firebase AI Logic requests.
 const recaptchaSiteKey =
-  import.meta.env.VITE_RECAPTCHA_V3_SITE_KEY;
+  import.meta.env.VITE_RECAPTCHA_ENTERPRISE_SITE_KEY;
 
 if (!recaptchaSiteKey) {
   throw new Error(
-    "Missing VITE_RECAPTCHA_V3_SITE_KEY in your environment configuration.",
+    "Missing VITE_RECAPTCHA_ENTERPRISE_SITE_KEY"
   );
 }
 
-// Local development: use a Firebase App Check debug token.
+// Enable debug token only during local development
 if (import.meta.env.DEV) {
   (
     self as typeof self & {
@@ -38,10 +36,8 @@ if (import.meta.env.DEV) {
 }
 
 export const appCheck = initializeAppCheck(app, {
-  provider: new ReCaptchaV3Provider(recaptchaSiteKey),
+  provider: new ReCaptchaEnterpriseProvider(recaptchaSiteKey),
   isTokenAutoRefreshEnabled: true,
 });
 
 export const db = getFirestore(app);
-
-
